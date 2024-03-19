@@ -1,3 +1,4 @@
+// Written by: Matthew Lingenfelter
 package com.example;
 
 public class Wall {
@@ -20,9 +21,9 @@ public class Wall {
     }
 
     // Returns the height of the maze
-    public int getHeight() {
-        return height;
-    }
+    //public int getHeight() {
+    //    return height;
+   // }
 
     // Returns the width of the maze
     public int getWidth() {
@@ -35,5 +36,10 @@ public class Wall {
             return walls[y][x] == 1;
         }
         return false;
+    }
+
+    // Returns a 2D array of where the walls are
+    public static int[][] getWalls() {
+        return walls;
     }
 }
