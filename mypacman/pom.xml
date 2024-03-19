@@ -42,7 +42,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <!--<mainClass>com.example.MainMenu</mainClass>-->
-                            <mainClass>com.example.MainMenu</mainClass>
+                            <mainClass>com.example.PacmanGame</mainClass>
                         </configuration>
                     </execution>
                 </executions>
