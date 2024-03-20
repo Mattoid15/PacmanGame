@@ -1,9 +1,9 @@
 // Written by: Matthew Lingenfelter
 package com.example;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+@SuppressWarnings("exports")
 public class GameBoard {
     private static final int TILE_SIZE = 30;
     private int[][] walls;
@@ -27,7 +27,7 @@ public class GameBoard {
     }
 
     // Updates the screen to display the walls
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsContext gc, Pacman pacman) {
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
         // Draw the walls on the screen
         for (int row = 0; row < height; row++) {
@@ -41,6 +41,10 @@ public class GameBoard {
                 }
             }
         }
+        // Draw pacman on the screen
+        float[] pacPos = pacman.getPos();
+        gc.setFill(Color.YELLOW);
+        gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
 }

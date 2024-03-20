@@ -5,8 +5,8 @@ package com.example;
 public class Agents {
     //private float x_coord;
     //private float y_coord;
-    private static float speed = 1f;
-    private float tollerance = 0.001f; // Use the tollerance to determine where the agent is in the map
+    private static float speed = 0.05f;
+    //private static float tollerance = 0.001f; // Use the tollerance to determine where the agent is in the map
     //private String direction;
     
     public static float[] move(String direction, float[] pos) {
@@ -23,10 +23,6 @@ public class Agents {
                 newY = pos[1] - speed;
                 x_int = (int) (pos[0] + 0.5f);
                 y_int = (int) (newY + 0.5f);
-                // Checks if the agent is inbetween grid locations, meaning they must continue the 
-                //if(Math.abs(x_coord-x_int) + Math.abs(y_coord-y_int) > tollerance) {
-                //    break;
-                //}
                 // Checks if the next location to move to is not a wall
                 if(!Wall.isWall(x_int, y_int)) {
                     pos[1] = newY;
@@ -34,7 +30,7 @@ public class Agents {
                 
                 break;
             case "South":
-                newY = pos[1] - speed;
+                newY = pos[1] + speed;
                 x_int = (int) (pos[0] + 0.5f);
                 y_int = (int) (newY + 0.5f);
                 if(!Wall.isWall(x_int, y_int)) {
@@ -45,6 +41,7 @@ public class Agents {
                 newX = pos[0] + speed;
                 x_int = (int) (newX + 0.5f);
                 y_int = (int) (pos[1] + 0.5f);
+                //System.out.println("(x,y)=("+x_int+","+y_int+")\r");
                 if(!Wall.isWall(x_int, y_int)) {
                     pos[0] = newX;
                 }
@@ -53,6 +50,7 @@ public class Agents {
                 newX = pos[0] - speed;
                 x_int = (int) (newX + 0.5f);
                 y_int = (int) (pos[1] + 0.5f);
+                //System.out.println("(x,y)=("+x_int+","+y_int+")");
                 if(!Wall.isWall(x_int, y_int)) {
                     pos[0] = newX;
                 }

@@ -12,8 +12,8 @@ public class Pacman extends Agents {
     private String direction;
 
     public Pacman() {
-        direction = "East";
-        x_coord = 1f;
+        direction = "West";
+        x_coord = 5f;
         y_coord = 1f;
     }
 
@@ -31,18 +31,19 @@ public class Pacman extends Agents {
 
     // Changes the direction pacman is going based on the key pressed
     public void changeDirection(KeyCode code) {
+        System.out.println("Changing directio to "+code);
         switch (code) {
             case UP:
                 direction = "North";
                 break;
             case DOWN:
-                direction = "North";
+                direction = "South";
                 break;
             case LEFT:
-                direction = "North";
+                direction = "West";
                 break;
             case RIGHT:
-                direction = "North";
+                direction = "East";
                 break;
             default:
                 break;

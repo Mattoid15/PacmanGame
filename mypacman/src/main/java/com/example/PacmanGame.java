@@ -1,6 +1,6 @@
 // Written by: Matthew Lingenfelter
 package com.example;
-
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -34,14 +34,16 @@ public class PacmanGame extends Application {
         primaryStage.show();
 
         // Initialize game objects
-        //gameboard
-        boolean gameOver = false;
+        //boolean gameOver = false;
 
         // Game loop
-        while (!gameOver) {
-            pacman.move();
-            gameboard.render(gc);
-            gameOver = true;
-        }
+        //while (!gameOver) {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                pacman.move();
+                gameboard.render(gc, pacman);
+            }
+        }.start();
     }
 }
