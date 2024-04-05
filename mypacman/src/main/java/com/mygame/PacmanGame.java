@@ -45,7 +45,7 @@ public class PacmanGame extends Application {
             @Override
             public void handle(long now) {
                 pacman.move();
-                testGhost.move();
+                testGhost.move(pacman.getPos());
                 gameboard.render(gc, pacman, testGhost);
             }
         }.start();

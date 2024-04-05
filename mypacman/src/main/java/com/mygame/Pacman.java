@@ -8,7 +8,6 @@ import javafx.scene.input.KeyCode;
 public class Pacman extends Agents {
     private float x_coord;
     private float y_coord;
-    //private float speed = 0.2f;
     private String direction;
 
     public Pacman() {
@@ -48,5 +47,11 @@ public class Pacman extends Agents {
             default:
                 break;
         }
+    }
+
+    // Returns the distance pacman is from a given location
+    public float getDistance(float x, float y) {
+        // gets the Manhattan distance
+        return Math.abs(x_coord - x) + Math.abs(y_coord - y);
     }
 }

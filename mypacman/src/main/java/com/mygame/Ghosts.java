@@ -16,18 +16,16 @@ public class Ghosts {
     }
 
     // Moves this ghost and updates location
-    public void move() {
+    public void move(float[] pacPos) {
         //Go until wall hit, then pick new direction
 
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord});
 
         // Check if a wall was hit
         if(x_coord==newPos[0] && y_coord==newPos[1]) {
-            changeDirection();
+            changeDirection(pacPos);
         }
 
-        //System.out.println("Before move: ("+x_coord+", "+y_coord+")");
-        //System.out.println("After move: ("+newPos[0]+", "+newPos[1]+")");
         x_coord = newPos[0];
         y_coord = newPos[1];
     }
@@ -38,16 +36,25 @@ public class Ghosts {
     }
 
     // Changes the direction if able
-    public void changeDirection() {
-        // Pick first action available
+    public void changeDirection(float[] pacPos) {
+        String bestAction = direction;
+        float closestDist = 99999f;
+
         for(int i = 0; i < actions.length; i++) {
             direction = actions[i];
             float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord});
+
             if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
-                break;
+                float distance = Math.abs(newPos[0] - pacPos[0]) + Math.abs(newPos[1] - pacPos[1]);
+                if(distance < closestDist) {
+                    closestDist = distance;
+                    bestAction = actions[i];
+                }
             }
-            x_coord = newPos[0];
-            y_coord = newPos[1];
         }
+        direction = bestAction;
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord});
+        x_coord = newPos[0];
+        y_coord = newPos[1];
     }
 }
