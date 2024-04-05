@@ -45,6 +45,10 @@ public class GameBoard {
         float[] pacPos = pacman.getPos();
         gc.setFill(Color.YELLOW);
         gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        gc.setFill(Color.RED);
+        gc.fillRect(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, 2, 2);
+
+        
     }
 
 }
