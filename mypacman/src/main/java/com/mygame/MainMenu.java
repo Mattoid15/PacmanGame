@@ -1,4 +1,4 @@
-package com.example;
+package com.mygame;
 
 //import javax.script.ScriptEngineFactory;
 

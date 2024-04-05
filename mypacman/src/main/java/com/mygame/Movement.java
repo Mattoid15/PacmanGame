@@ -1,4 +1,4 @@
-package com.example;
+package com.mygame;
 
 public class Movement {
     public static int[] updateLoc(int[] current, int rowChange, int colChange) {

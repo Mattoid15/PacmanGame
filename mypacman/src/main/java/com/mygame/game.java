@@ -1,4 +1,4 @@
-package com.example;
+package com.mygame;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;

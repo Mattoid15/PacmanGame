@@ -1,5 +1,5 @@
 // Written by: Matthew Lingenfelter
-package com.example;
+package com.mygame;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -27,7 +27,7 @@ public class GameBoard {
     }
 
     // Updates the screen to display the walls
-    public void render(GraphicsContext gc, Pacman pacman) {
+    public void render(GraphicsContext gc, Pacman pacman, Ghosts ghost) {
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
         // Draw the walls on the screen
         for (int row = 0; row < height; row++) {
@@ -41,10 +41,19 @@ public class GameBoard {
                 }
             }
         }
+        //Draw ghost on the screen
+        float[] gPos = ghost.getPos();
+        gc.setFill(Color.PINK);
+        gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+
         // Draw pacman on the screen
         float[] pacPos = pacman.getPos();
+        // Pacman Body
         gc.setFill(Color.YELLOW);
         gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+        // Pacman indicator
         gc.setFill(Color.RED);
         gc.fillRect(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, 2, 2);
 

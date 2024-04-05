@@ -1,4 +1,4 @@
-package com.example;
+package com.mygame;
 
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;

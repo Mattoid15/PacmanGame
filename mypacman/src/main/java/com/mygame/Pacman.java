@@ -1,6 +1,6 @@
 // Written by: Matthew Lingenfelter
 
-package com.example;
+package com.mygame;
 
 import javafx.scene.input.KeyCode;
 

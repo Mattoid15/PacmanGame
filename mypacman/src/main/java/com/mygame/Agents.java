@@ -1,23 +1,13 @@
 // Written by: Matthew Lingenfelter
 
-package com.example;
+package com.mygame;
 
 public class Agents {
-    //private float x_coord;
-    //private float y_coord;
     private static float speed = 0.05f;
-    //private static float tollerance = 0.001f; // Use the tollerance to determine where the agent is in the map
-    //private String direction;
-    //private static final int TILE_SIZE = 30;
     
     public static float[] move(String direction, float[] pos) {
-        //float x_coord = pos[0];
-        //float y_coord = pos[1];
         float newY = -1f;
         float newX = -1f;
-        //int x_int = -1;
-        //int y_int = -1;
-        //float[] result = new float[] {x_coord};
 
         // Checks if the next location to move to is not a wall, based on the direction
         switch(direction){

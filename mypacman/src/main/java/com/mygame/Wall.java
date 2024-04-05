@@ -1,5 +1,5 @@
 // Written by: Matthew Lingenfelter
-package com.example;
+package com.mygame;
 
 public class Wall {
     //private static int height;

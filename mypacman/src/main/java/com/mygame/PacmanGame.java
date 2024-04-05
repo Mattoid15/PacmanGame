@@ -1,5 +1,5 @@
 // Written by: Matthew Lingenfelter
-package com.example;
+package com.mygame;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,6 +22,9 @@ public class PacmanGame extends Application {
         Pacman pacman = new Pacman();
         GameBoard gameboard = new GameBoard();
 
+        Ghosts testGhost = new Ghosts();
+
+
         Canvas canvas = new Canvas(gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane();
@@ -42,7 +45,8 @@ public class PacmanGame extends Application {
             @Override
             public void handle(long now) {
                 pacman.move();
-                gameboard.render(gc, pacman);
+                testGhost.move();
+                gameboard.render(gc, pacman, testGhost);
             }
         }.start();
     }
