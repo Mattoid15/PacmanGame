@@ -2,15 +2,14 @@
 
 package com.mygame;
 
-import javafx.css.Style;
-
 public class Ghosts {
     private float x_coord;
     private float y_coord;
     private float speed = 0.025f;
     private String direction;
     private String[] actions = {"North", "South", "East", "West"};
-    private String[] oppActions = {"South", "North", "West", "East"};
+    //private String[] oppActions = {"South", "North", "West", "East"};
+    private static float tollerance = 0.1f;
 
     public Ghosts() {
         direction = "East";
@@ -23,13 +22,30 @@ public class Ghosts {
         int possibleMoves = 0;
 
         // Count the number of moves the ghost can make
-        //System.out.println("Currently: "+direction+" "+x_coord+" "+y_coord);
-        //System.out.println("Rounding north: "+direction+" "+Math.round(x_coord)+" "+(int)(y_coord-speed));
-
+        if(!Wall.isWall((int)x_coord, ((int)y_coord)+1)) {
+            if(x_coord >= ((int)x_coord)-tollerance && x_coord <= ((int)x_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+        if(!Wall.isWall((int)x_coord, ((int)y_coord)-1)) {
+            if(x_coord >= ((int)x_coord)-tollerance && x_coord <= ((int)x_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+        if(!Wall.isWall(((int)x_coord)+1, (int)y_coord)) {
+            if(y_coord >= ((int)y_coord)-tollerance && y_coord <= ((int)y_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+        if(!Wall.isWall(((int)x_coord)-1, (int)y_coord)) {
+            if(y_coord >= ((int)y_coord)-tollerance && y_coord <= ((int)y_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
 
         // Check if a wall was hit, or at an intersection
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        if((x_coord==newPos[0] && y_coord==newPos[1])){//} || possibleMoves<=1) {
+        if((x_coord==newPos[0] && y_coord==newPos[1]) || possibleMoves>=3) {
             changeDirection(pacPos);
         }
         // If not, continue forward

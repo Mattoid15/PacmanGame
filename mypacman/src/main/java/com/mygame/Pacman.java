@@ -50,8 +50,8 @@ public class Pacman extends Agents {
     }
 
     // Returns the distance pacman is from a given location
-    public float getDistance(float x, float y) {
+    //public float getDistance(float x, float y) {
         // gets the Manhattan distance
-        return Math.abs(x_coord - x) + Math.abs(y_coord - y);
-    }
+    //    return Math.abs(x_coord - x) + Math.abs(y_coord - y);
+    //}
 }

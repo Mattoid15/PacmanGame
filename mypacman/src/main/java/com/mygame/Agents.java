@@ -2,11 +2,7 @@
 
 package com.mygame;
 
-//import javax.transaction.xa.Xid;
-
 public class Agents {
-    //private static float speed = 0.05f;
-    //private static float tollerance = 0.1f;
     
     public static float[] move(String direction, float[] pos, float speed) {
         float newX = -1f;

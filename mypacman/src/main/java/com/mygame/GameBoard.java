@@ -28,7 +28,6 @@ public class GameBoard {
 
     // Updates the screen to display the walls
     public void render(GraphicsContext gc, Pacman pacman, Ghosts ghost) {
-        float[] gPos = ghost.getPos();
         float[] pacPos = pacman.getPos();
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
 
@@ -45,7 +44,32 @@ public class GameBoard {
             }
         }
         
+        // For each ghost.. pass in color
+        drawGhost(gc, ghost);
+
+        // Draw pacman on the screen
+        gc.setFill(Color.BEIGE);
+        gc.fillRect(((int)pacPos[0])*TILE_SIZE, ((int)pacPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+        // Pacman Body
+        gc.setFill(Color.YELLOW);
+        gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+        // Pacman indicator
+        gc.setFill(Color.RED);
+        gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, 2, 2);
+
+        
+    }
+
+    // Draws a ghost on the screen
+    private void drawGhost(GraphicsContext gc, Ghosts g) {
+        float[] gPos = g.getPos();
+
         // Draw ghost on the screen
+        gc.setFill(Color.RED);
+        gc.fillRect(((int)gPos[0])*TILE_SIZE, ((int)gPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
         // Ghost Body
         gc.setFill(Color.PINK);
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, 28);
@@ -60,7 +84,7 @@ public class GameBoard {
 
         // Ghost Puples
         gc.setFill(Color.BLACK);
-        switch(ghost.getDir()) {
+        switch(g.getDir()) {
             case "North":
                 gc.fillOval(gPos[0]*TILE_SIZE+7.5, gPos[1]*TILE_SIZE+5, 5, 5);
                 gc.fillOval(gPos[0]*TILE_SIZE+17.5, gPos[1]*TILE_SIZE+5, 5, 5);
@@ -79,21 +103,6 @@ public class GameBoard {
                 gc.fillOval(gPos[0]*TILE_SIZE+20, gPos[1]*TILE_SIZE+7.5, 5, 5);
                 break;
         }
-
-
-        // Draw pacman on the screen
-        gc.setFill(Color.BEIGE);
-        gc.fillRect(((int)pacPos[0])*TILE_SIZE, ((int)pacPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-        // Pacman Body
-        gc.setFill(Color.YELLOW);
-        gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-        // Pacman indicator
-        gc.setFill(Color.RED);
-        gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, 2, 2);
-
-        
     }
 
 }
