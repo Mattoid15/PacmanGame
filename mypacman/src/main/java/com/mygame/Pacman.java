@@ -8,6 +8,7 @@ import javafx.scene.input.KeyCode;
 public class Pacman extends Agents {
     private float x_coord;
     private float y_coord;
+    private float speed = 0.05f;
     private String direction;
 
     public Pacman() {
@@ -18,7 +19,7 @@ public class Pacman extends Agents {
 
     // Moves pacman and updates his location
     public void move() {
-        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord});
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
         x_coord = newPos[0];
         y_coord = newPos[1];
     }
@@ -30,7 +31,6 @@ public class Pacman extends Agents {
 
     // Changes the direction pacman is going based on the key pressed
     public void changeDirection(KeyCode code) {
-        System.out.println("Changing directio to "+code);
         switch (code) {
             case UP:
                 direction = "North";
