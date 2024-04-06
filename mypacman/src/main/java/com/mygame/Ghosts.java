@@ -8,7 +8,7 @@ public class Ghosts {
     private float speed = 0.025f;
     private String direction;
     private String[] actions = {"North", "South", "East", "West"};
-    //private String[] oppActions = {"South", "North", "West", "East"};
+    private String[] oppActions = {"South", "North", "West", "East"};
     private static float tollerance = 0.1f;
 
     public Ghosts() {
@@ -73,7 +73,7 @@ public class Ghosts {
 
             if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
                 float distance = Math.abs(newPos[0] - pacPos[0]) + Math.abs(newPos[1] - pacPos[1]);
-                if(distance < closestDist) {
+                if(distance < closestDist && direction != oppActions[i]) {
                     closestDist = distance;
                     bestAction = actions[i];
                 }

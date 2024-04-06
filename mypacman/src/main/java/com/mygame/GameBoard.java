@@ -30,7 +30,7 @@ public class GameBoard {
     public void render(GraphicsContext gc, Pacman pacman, Ghosts ghost) {
         float[] pacPos = pacman.getPos();
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
-
+        
         // Draw the walls on the screen
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -43,7 +43,7 @@ public class GameBoard {
                 }
             }
         }
-        
+       
         // For each ghost.. pass in color
         drawGhost(gc, ghost);
 

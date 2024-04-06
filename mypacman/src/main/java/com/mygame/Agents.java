@@ -40,6 +40,14 @@ public class Agents {
                 // Calculate the new position based on the speed
                 newX = pos[0] + speed;
 
+                // If agent is moving from the right side of the screen to the left side
+                if(newX >= Wall.getWalls()[0].length-1) {
+                    pos[0] = 0;
+                    pos[1] = yInt;
+                    break;
+                }
+                
+
                 // If the next position is wall, don't move
                 if(Wall.isWall(xInt+1, yInt) && newX > xInt) {
                     break;
@@ -51,6 +59,15 @@ public class Agents {
             case "West": // Left
                 // Calculate the new position based on the speed
                 newX = pos[0] - speed;
+
+                // If agent is moving from the left side of the screen to the right side
+                //System.out.println(newX);
+                if(xInt <= 0) {
+                    System.out.println(newX);
+                    pos[0] = Wall.getWalls()[0].length-1;
+                    pos[1] = yInt;
+                    break;
+                }
 
                 // If the next position is wall, don't move
                 if(Wall.isWall(xInt-1, yInt) && newX < xInt) {
