@@ -82,6 +82,9 @@ public class GameBoard {
 
 
         // Draw pacman on the screen
+        gc.setFill(Color.BEIGE);
+        gc.fillRect(((int)pacPos[0])*TILE_SIZE, ((int)pacPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
         // Pacman Body
         gc.setFill(Color.YELLOW);
         gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);

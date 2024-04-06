@@ -3,7 +3,7 @@ package com.mygame;
 
 public class Wall {
     //private static int height;
-    //private static int width;
+    private static int width;
     private static int[][] walls = {
         {1,1,1,1,1,1,1},
         {1,0,0,0,0,0,1},
@@ -17,7 +17,7 @@ public class Wall {
     // Default constructor that sets the height and width correctly
     public Wall() {
         //height = walls.length;
-        //width = walls[0].length;
+        width = walls[0].length;
     }
 
     // Returns the height of the maze
@@ -26,9 +26,9 @@ public class Wall {
     //}
 
     // Returns the width of the maze
-    //public int getWidth() {
-    //    return width;
-    //}
+    public static int getWidth() {
+        return width;
+    }
 
     // Checks if a given location is within the bounds of the maze, and is a wall
     public static boolean isWall(int y, int x) {
