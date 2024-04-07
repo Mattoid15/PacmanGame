@@ -67,4 +67,9 @@ public class Pacman extends Agents {
     public void updateScore(int x) {
         score += x;
     }
+
+    // Returns pacman's current direction
+    public String getDirection() {
+        return direction;
+    }
 }

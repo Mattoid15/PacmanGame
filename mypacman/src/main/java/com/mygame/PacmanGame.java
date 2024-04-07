@@ -25,7 +25,10 @@ public class PacmanGame extends Application {
         Food foods = new Food();
         int[][] foodsLeft = foods.getFood();
 
-        Ghosts testGhost = new Ghosts();
+        Ghosts inky = new Ghosts("Inky", 14f, 14f);
+        Ghosts blinky = new Ghosts("Blinky", 13f, 14f);
+
+        Ghosts[] allGhosts = {inky, blinky};
 
 
         Canvas canvas = new Canvas(gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
@@ -50,8 +53,10 @@ public class PacmanGame extends Application {
                 pacman.move();
                 pacman.eating(foodsLeft);
                 System.out.print("Score: "+pacman.getScore()+"\r");
-                testGhost.move(pacman.getPos());
-                gameboard.render(gc, pacman, foodsLeft, testGhost);
+                for(int i = 0; i < allGhosts.length; i++) {
+                    allGhosts[i].move(pacman);
+                }
+                gameboard.render(gc, pacman, foodsLeft, allGhosts);
             }
         }.start();
     }

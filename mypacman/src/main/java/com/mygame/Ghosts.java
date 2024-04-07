@@ -11,15 +11,18 @@ public class Ghosts {
     private String[] oppActions = {"South", "North", "West", "East"};
     private static float tollerance = 0.1f;
     private boolean inJail = true;
+    private String name = "";
 
-    public Ghosts() {
+    public Ghosts(String n, float x, float y) {
+        name = n;
         direction = "North";
-        x_coord = 13f;
-        y_coord = 14f;
+        x_coord = x;
+        y_coord = y;
     }
 
     // Moves this ghost and updates location
-    public void move(float[] pacPos) {
+    public void move(Pacman pacMan) {
+        float[] pacPos = pacMan.getPos();
         // Check if ghost is in jail
         checkJail();
         if(inJail) {
@@ -57,7 +60,19 @@ public class Ghosts {
         // Check if a wall was hit, or at an intersection
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
         if((x_coord==newPos[0] && y_coord==newPos[1]) || possibleMoves>=3) {
-            changeDirection(pacPos);
+            switch (name) {
+                case "Blinky":
+                    Blinky(pacPos);
+                    break;
+                case "Pinky":
+                case "Inky":
+                    Inky(pacPos, pacMan.getDirection());
+                    break;
+                case "Clyde":
+                default:
+                    //Blinky(pacPos);
+                    break;
+            }
         }
         // If not, continue forward
         x_coord = newPos[0];
@@ -74,8 +89,21 @@ public class Ghosts {
         return direction;
     }
 
+    public String getName() {
+        return name;
+    }
+    // Checks if this ghost is currently in jail
+    private void checkJail() {
+        if((x_coord >= 11f && x_coord <= 16f)&&(y_coord >= 12f && y_coord <= 16f)) {
+            inJail = true;
+        } else {
+            inJail = false;
+        }
+    }
+
     // Picks the direction that moves towards pacman
-    public void changeDirection(float[] pacPos) {
+    // Blinky algorithm - chases pacman directly
+    public void Blinky(float[] pacPos) {
         String bestAction = direction;
         float closestDist = 99999f;
 
@@ -97,12 +125,31 @@ public class Ghosts {
         y_coord = newPos[1];
     }
 
-    // Checks if this ghost is currently in jail
-    private void checkJail() {
-        if((x_coord >= 11f && x_coord <= 16f)&&(y_coord >= 12f && y_coord <= 16f)) {
-            inJail = true;
-        } else {
-            inJail = false;
+    // Inky algorithm - tries to get behind pacman
+    public void Inky(float[] pacPos, String pacDir) {
+        String bestAction = direction;
+        float bestDist = 99999f;
+
+        for(int j = 0; j < oppActions.length; j++) {
+            if(name=="Inky" && pacDir==oppActions[j]) {
+                pacPos = Agents.move(oppActions[j], pacPos, 0.05f);
+            }
         }
+        
+        for(int i = 0; i < actions.length; i++) {
+            float[] newPos = Agents.move(actions[i], new float[] {x_coord, y_coord}, speed);
+
+            if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
+                float distance = Math.abs(newPos[0] - pacPos[0]) + Math.abs(newPos[1] - pacPos[1]);
+                if(distance < bestDist && direction != oppActions[i]) {
+                    bestDist = distance;
+                    bestAction = actions[i];
+                }
+            }
+        }
+        direction = bestAction;
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
+        x_coord = newPos[0];
+        y_coord = newPos[1];
     }
 }

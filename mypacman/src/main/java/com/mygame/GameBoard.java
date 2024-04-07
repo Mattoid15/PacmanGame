@@ -27,7 +27,7 @@ public class GameBoard {
     }
 
     // Updates the screen to display the walls
-    public void render(GraphicsContext gc, Pacman pacman, int[][] food, Ghosts ghost) {
+    public void render(GraphicsContext gc, Pacman pacman, int[][] food, Ghosts[] allGhosts) {
         float[] pacPos = pacman.getPos();
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
         
@@ -46,11 +46,14 @@ public class GameBoard {
         drawFood(gc, food);
 
         // For each ghost.. pass in color
-        drawGhost(gc, ghost);
+        for(int i = 0; i < allGhosts.length; i++) {
+            drawGhost(gc, allGhosts[i]);
+        }
+        //drawGhost(gc, ghost);
 
         // Draw pacman on the screen
-        gc.setFill(Color.BEIGE);
-        gc.fillRect(((int)pacPos[0])*TILE_SIZE, ((int)pacPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        //gc.setFill(Color.BEIGE);
+        //gc.fillRect(((int)pacPos[0])*TILE_SIZE, ((int)pacPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
         // Pacman Body
         gc.setFill(Color.YELLOW);
@@ -59,8 +62,6 @@ public class GameBoard {
         // Pacman indicator
         gc.setFill(Color.RED);
         gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, 2, 2);
-
-        
     }
 
     // Draws a ghost on the screen
@@ -68,11 +69,24 @@ public class GameBoard {
         float[] gPos = g.getPos();
 
         // Draw ghost on the screen
-        gc.setFill(Color.RED);
-        gc.fillRect(((int)gPos[0])*TILE_SIZE, ((int)gPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        //gc.setFill(Color.RED);
+        //gc.fillRect(((int)gPos[0])*TILE_SIZE, ((int)gPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
         // Ghost Body
-        gc.setFill(Color.PINK);
+        switch (g.getName()) {
+            case "Blinky":
+                gc.setFill(Color.RED);
+                break;
+            case "Pinky":
+                gc.setFill(Color.PINK);
+                break;
+            case "Inky":
+                gc.setFill(Color.CYAN);
+                break;
+            case "Clyde":
+                gc.setFill(Color.ORANGE);
+                break;
+        }
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, 28);
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE+5, 15, 25);
         gc.fillOval(gPos[0]*TILE_SIZE+7.5, gPos[1]*TILE_SIZE+5, 15, 25);
