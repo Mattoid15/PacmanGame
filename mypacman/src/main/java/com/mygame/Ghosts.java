@@ -10,15 +10,26 @@ public class Ghosts {
     private String[] actions = {"North", "South", "East", "West"};
     private String[] oppActions = {"South", "North", "West", "East"};
     private static float tollerance = 0.1f;
+    private boolean inJail = true;
 
     public Ghosts() {
-        direction = "East";
-        x_coord = 1f;
-        y_coord = 5f;
+        direction = "North";
+        x_coord = 13f;
+        y_coord = 14f;
     }
 
     // Moves this ghost and updates location
     public void move(float[] pacPos) {
+        // Check if ghost is in jail
+        checkJail();
+        if(inJail) {
+            direction = "North";
+            float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
+            x_coord = newPos[0];
+            y_coord = newPos[1];
+            return;
+        }
+
         int possibleMoves = 0;
 
         // Count the number of moves the ghost can make
@@ -84,5 +95,14 @@ public class Ghosts {
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
         x_coord = newPos[0];
         y_coord = newPos[1];
+    }
+
+    // Checks if this ghost is currently in jail
+    private void checkJail() {
+        if((x_coord >= 11f && x_coord <= 16f)&&(y_coord >= 12f && y_coord <= 16f)) {
+            inJail = true;
+        } else {
+            inJail = false;
+        }
     }
 }

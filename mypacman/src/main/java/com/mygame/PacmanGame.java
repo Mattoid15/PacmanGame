@@ -49,6 +49,7 @@ public class PacmanGame extends Application {
             public void handle(long now) {
                 pacman.move();
                 pacman.eating(foodsLeft);
+                System.out.print("Score: "+pacman.getScore()+"\r");
                 testGhost.move(pacman.getPos());
                 gameboard.render(gc, pacman, foodsLeft, testGhost);
             }
