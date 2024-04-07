@@ -22,6 +22,9 @@ public class PacmanGame extends Application {
         Pacman pacman = new Pacman();
         GameBoard gameboard = new GameBoard();
 
+        Food foods = new Food();
+        int[][] foodsLeft = foods.getFood();
+
         Ghosts testGhost = new Ghosts();
 
 
@@ -45,8 +48,9 @@ public class PacmanGame extends Application {
             @Override
             public void handle(long now) {
                 pacman.move();
+                pacman.eating(foodsLeft);
                 testGhost.move(pacman.getPos());
-                gameboard.render(gc, pacman, testGhost);
+                gameboard.render(gc, pacman, foodsLeft, testGhost);
             }
         }.start();
     }

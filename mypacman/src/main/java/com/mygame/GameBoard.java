@@ -27,7 +27,7 @@ public class GameBoard {
     }
 
     // Updates the screen to display the walls
-    public void render(GraphicsContext gc, Pacman pacman, Ghosts ghost) {
+    public void render(GraphicsContext gc, Pacman pacman, int[][] food, Ghosts ghost) {
         float[] pacPos = pacman.getPos();
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
         
@@ -43,7 +43,8 @@ public class GameBoard {
                 }
             }
         }
-       
+        drawFood(gc, food);
+
         // For each ghost.. pass in color
         drawGhost(gc, ghost);
 
@@ -105,4 +106,15 @@ public class GameBoard {
         }
     }
 
+    private void drawFood(GraphicsContext gc, int[][] f) {
+        // Draw all food remaining on the screen
+        for(int row = 0; row < height; row++) {
+            for(int col = 0; col < width; col++) {
+                if(f[row][col] == 1) {
+                    gc.setFill(Color.WHITE);
+                    gc.fillOval(col*TILE_SIZE+10, row*TILE_SIZE+10, TILE_SIZE/4, TILE_SIZE/4);
+                }
+            }
+        }
+    }
 }

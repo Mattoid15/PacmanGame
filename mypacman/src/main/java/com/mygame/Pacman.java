@@ -49,6 +49,11 @@ public class Pacman extends Agents {
         }
     }
 
+    public void eating(int[][] food) {
+        if(food[(int)y_coord][(int)x_coord] == 1) {
+            food[(int)y_coord][(int)x_coord] = 0;
+        }
+    }
     // Returns the distance pacman is from a given location
     //public float getDistance(float x, float y) {
         // gets the Manhattan distance
