@@ -11,6 +11,7 @@ public class Ghosts {
     private String[] oppActions = {"South", "North", "West", "East"};
     private static float tollerance = 0.1f;
     private boolean inJail = true;
+    private boolean isScared = false;
     private String name = "";
 
     public Ghosts(String n, float x, float y) {
@@ -22,6 +23,11 @@ public class Ghosts {
 
     // Moves this ghost and updates location
     public void move(Pacman pacMan, Ghosts[] ghosts) {
+        if(isScared) {
+            scaredMove(ghosts);
+            return;
+        }
+
         float[] pacPos = pacMan.getPos();
         // Check if ghost is in jail
         checkJail();
@@ -85,7 +91,7 @@ public class Ghosts {
         // Check if the next position has a ghost, 
         // If it does, don't move and flip directions
         // If not, continue the same direction
-        if(!Agents.checkCollition(ghosts, name, newPos)) {
+        if(!Agents.checkCollition(ghosts, name, newPos) && (newPos[0] >= 1 && newPos[1] < 27f)) {
             x_coord = newPos[0];
             y_coord = newPos[1];
         } else {
@@ -154,7 +160,9 @@ public class Ghosts {
 
         // Check if the location behind pacman is a wall
         // If it is, track pacman's actual location instead
-        if(Wall.isWall((int)track[0], (int)track[1])) {
+        if((track[0]<0||track[0]>Wall.getWalls()[0].length-1)||(track[1]<0||track[1]<Wall.getWalls().length-1)||Wall.isWall((int)track[0],(int)track[1])){
+
+//        if(Wall.isWall((int)track[0], (int)track[1])) {
             track[0] = pacPos[0];
             track[1] = pacPos[1];
         }
@@ -186,7 +194,9 @@ public class Ghosts {
 
         // Check if the location in front of pacman is a wall
         // If it is, track pacman's actual location instead
-        if(Wall.isWall((int)track[0], (int)track[1])) {
+        if((track[0]>0&&track[0]<Wall.getWalls().length-1)&&(track[1]>0&&track[1]<Wall.getWalls()[0].length-1)&&Wall.isWall((int)track[0],(int)track[1])){
+
+        //if(Wall.isWall((int)track[0],(int)track[1])) {
             track[0] = pacPos[0];
             track[1] = pacPos[1];
         }
@@ -229,5 +239,105 @@ public class Ghosts {
             }
         }
         return bestAction;
+    }
+
+    public void setScared(boolean s) {
+        isScared = s;
+    }
+
+    public void scaredMove(Ghosts[] ghosts) {
+        // Pick random direction to move when in a corner
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, (speed*0.5f));
+        if(x_coord==newPos[0] && y_coord==newPos[1]) {
+            // pick new direction
+            for(int i = 0; i < actions.length; i++) {
+                direction = actions[i];
+                newPos = Agents.move(direction, new float[] {x_coord, y_coord}, (speed*0.5f));
+                if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
+                    break;
+                }
+            }
+        }
+
+
+        // Check if the next position has a ghost, 
+        // If it does, don't move and flip directions
+        // If not, continue the same direction
+        if(!Agents.checkCollition(ghosts, name, newPos)) {
+            x_coord = newPos[0];
+            y_coord = newPos[1];
+        } else {
+            for(int i = 0; i < actions.length; i++) {
+                if(direction == actions[i]) {
+                    direction = oppActions[i];
+                    break;
+                }
+            }
+        }
+    }
+
+    public float[] trackLocation(Pacman pacMan) {
+        float[] pacPos = pacMan.getPos();
+        float[] tracking = new float[] {pacPos[0], pacPos[1]};
+        switch (name) {
+            case "Blinky":
+                break;
+            case "Pinky":
+                switch (pacMan.getDirection()) {
+                    case "North":
+                        tracking[1] +=2;
+                        break;
+                    case "South":
+                        tracking[1] -=2;
+                        break;
+                    case "East":
+                        tracking[0] -=2;
+                        break;
+                    case "West":
+                        tracking[0] +=2;
+                        break;
+                }
+                    if((tracking[0]<0||tracking[0]>Wall.getWalls()[0].length-1)||(tracking[1]<0||tracking[1]<Wall.getWalls().length-1)||Wall.isWall((int)tracking[0],(int)tracking[1])){
+
+
+//                if(Wall.isWall((int)tracking[0], (int)tracking[1])) {
+                    tracking[0] = pacPos[0];
+                    tracking[1] = pacPos[1];
+                }
+                break;
+            case "Inky":
+                switch (pacMan.getDirection()) {
+                    case "North":
+                        tracking[1] -=2;
+                        break;
+                    case "South":
+                        tracking[1] +=2;
+                        break;
+                    case "East":
+                        tracking[0] +=2;
+                        break;
+                    case "West":
+                        tracking[0] -=2;
+                        break;
+                }
+                if((tracking[0]>0&&tracking[0]<Wall.getWalls().length-1)&&(tracking[1]>0&&tracking[1]<Wall.getWalls()[0].length-1)&&Wall.isWall((int)tracking[0],(int)tracking[1])){
+
+//                if(Wall.isWall((int)tracking[0], (int)tracking[1])) {
+                    tracking[0] = pacPos[0];
+                    tracking[1] = pacPos[1];
+                }
+                break;
+            case "Clyde":
+                float distance = Math.abs(x_coord - pacPos[0]) + Math.abs(y_coord - pacPos[1]);
+                if(distance <= 8f) {
+                    tracking[0] = 1;
+                    tracking[1] = 29;
+                }
+                break;
+            default:
+                System.out.println("Error occured finding ghost "+name+" alogrithm");
+                break;
+        }
+        return tracking;
     }
 }

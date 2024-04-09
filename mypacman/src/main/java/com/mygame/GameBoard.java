@@ -47,7 +47,7 @@ public class GameBoard {
 
         // For each ghost
         for(int i = 0; i < allGhosts.length; i++) {
-            drawGhost(gc, allGhosts[i]); // Draw ghost on the screen
+            drawGhost(gc, allGhosts[i], pacman); // Draw ghost on the screen
         }
 
         // Draw pacman on the screen
@@ -61,24 +61,39 @@ public class GameBoard {
     }
 
     // Draws a ghost on the screen
-    private void drawGhost(GraphicsContext gc, Ghosts g) {
+    private void drawGhost(GraphicsContext gc, Ghosts g, Pacman pacMan) {
         float[] gPos = g.getPos();
 
         // Ghost Body
         switch (g.getName()) {
             case "Blinky":
                 gc.setFill(Color.RED);
+                gc.setStroke(Color.RED);
                 break;
             case "Pinky":
                 gc.setFill(Color.PINK);
+                gc.setStroke(Color.PINK);
                 break;
             case "Inky":
                 gc.setFill(Color.CYAN);
+                gc.setStroke(Color.CYAN);
                 break;
             case "Clyde":
                 gc.setFill(Color.ORANGE);
+                gc.setStroke(Color.ORANGE);
                 break;
         }
+        //Show where the ghost is heading to
+        float[] track = g.trackLocation(pacMan);
+        gc.beginPath();
+        gc.lineTo(gPos[0]*TILE_SIZE+15, gPos[1]*TILE_SIZE+15);
+        gc.lineTo(track[0]*TILE_SIZE+15, track[1]*TILE_SIZE+15);
+        gc.closePath();
+        gc.stroke();
+
+        //gc.quadraticCurveTo(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, track[0]*TILE_SIZE, track[1]*TILE_SIZE);
+        //gc.clip();
+        //gc.fillRect(track[0]*TILE_SIZE, track[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, 28);
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE+5, 15, 25);
@@ -115,12 +130,14 @@ public class GameBoard {
 
     // Draw all food remaining on the screen
     private void drawFood(GraphicsContext gc, int[][] f) {
+        gc.setFill(Color.WHITE);
         for(int row = 0; row < height; row++) {
             for(int col = 0; col < width; col++) {
-                if(f[row][col] == 1) {
-                    gc.setFill(Color.WHITE);
+                if(f[row][col] == 1) { // Normal food
                     gc.fillOval(col*TILE_SIZE+10, row*TILE_SIZE+10, TILE_SIZE/4, TILE_SIZE/4);
-                } //if == 2, powerpellet
+                } else if(f[row][col] == 2) { // Power pellet
+                    gc.fillOval(col*TILE_SIZE+2.5, row*TILE_SIZE+2.5, TILE_SIZE-5, TILE_SIZE-5);
+                }
             }
         }
     }

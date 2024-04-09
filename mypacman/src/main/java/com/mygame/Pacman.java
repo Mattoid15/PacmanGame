@@ -14,8 +14,8 @@ public class Pacman extends Agents {
 
     public Pacman() {
         direction = "West";
-        x_coord = 5f;
-        y_coord = 1f;
+        x_coord = 14f;
+        y_coord = 23f;
     }
 
     // Moves pacman and updates his location
@@ -51,11 +51,17 @@ public class Pacman extends Agents {
     }
 
     // Method used to tell if pacman is eating food
-    public void eating(int[][] food) {
+    public boolean eating(int[][] food) {
         if(food[(int)y_coord][(int)x_coord] == 1) {
             food[(int)y_coord][(int)x_coord] = 0;
             updateScore(10);
+        } else if (food[(int)y_coord][(int)x_coord] == 2) {
+            food[(int)y_coord][(int)x_coord] = 0;
+            updateScore(50);
+            // set ghosts to be scared
+            return true;
         }
+        return false;
     }
 
     // Returns the current score pacman has

@@ -63,7 +63,7 @@ public class Agents {
                 // If agent is moving from the left side of the screen to the right side
                 //System.out.println(newX);
                 if(xInt <= 0) {
-                    System.out.println(newX);
+                    //System.out.println(newX);
                     pos[0] = Wall.getWalls()[0].length-1;
                     pos[1] = yInt;
                     break;
@@ -91,7 +91,7 @@ public class Agents {
         for(int i = 0; i < ghosts.length; i++) {
             if(name != ghosts[i].getName()) { // Check each ghost position that is not the current ghost
                 if((int)newPos[0] == (int)ghosts[i].getPos()[0] && (int)newPos[1] == (int)ghosts[i].getPos()[1]) {
-                    System.out.println(name+" colliding with "+ghosts[i].getName());
+                    //System.out.println(name+" colliding with "+ghosts[i].getName());
                     return true;
                 }
             }

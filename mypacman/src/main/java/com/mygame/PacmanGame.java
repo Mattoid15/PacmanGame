@@ -1,5 +1,7 @@
 // Written by: Matthew Lingenfelter
 package com.mygame;
+import java.time.LocalDateTime;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -11,6 +13,8 @@ import javafx.stage.Stage;
 @SuppressWarnings("exports")
 public class PacmanGame extends Application {
     private static final int TILE_SIZE = 30;
+    public LocalDateTime nextTime = LocalDateTime.now();   
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -53,19 +57,34 @@ public class PacmanGame extends Application {
 
         // Initialize game objects
         //boolean gameOver = false;
+             
 
         // Game loop
         //while (!gameOver) {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                LocalDateTime currentTime = LocalDateTime.now();
+                
                 pacman.move(); // Move pacman 
-                // Check if pacman dies
-                pacman.eating(foodsLeft); // Check if pacman ate food
-                System.out.print("Score: "+pacman.getScore()+"\r");
-                for(int i = 0; i < allGhosts.length; i++) { // For each ghost
-                    allGhosts[i].move(pacman, allGhosts); // Move ghost
+                // Check gameOver conditions, no more food; pacman dies
+                // Check if pacman ate food, or a powerpellet
+                if(pacman.eating(foodsLeft)) {
+                    currentTime = LocalDateTime.now();
+                    System.out.println("Scaring ghosts");
+                    nextTime = currentTime.plusSeconds(6);
+                    for(int i = 0; i < allGhosts.length; i++) { // For each ghost
+                        //allGhosts[i].setScared(true); // Move ghost
+                    }
+                } 
+                if(currentTime.isBefore(nextTime)) {
+                    for(int i = 0; i < allGhosts.length; i++) { // For each ghost
+                       // allGhosts[i].setScared(false); // Move ghost
+                    }
                 }
+                for(int i = 0; i < allGhosts.length; i++) { // For each ghost
+                     allGhosts[i].move(pacman, allGhosts);; // Move ghost
+                 }
                 gameboard.render(gc, pacman, foodsLeft, allGhosts); // Update the screen
             }
         }.start();
