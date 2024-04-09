@@ -83,4 +83,19 @@ public class Agents {
         }
         return pos;
     }
+
+    // Pass in array of ghosts, and current ghost name
+    public static boolean checkCollition(Ghosts[] ghosts, String name, float[] newPos) {        
+        // Check if new location has a different ghost
+        // If it does, don't move
+        for(int i = 0; i < ghosts.length; i++) {
+            if(name != ghosts[i].getName()) { // Check each ghost position that is not the current ghost
+                if((int)newPos[0] == (int)ghosts[i].getPos()[0] && (int)newPos[1] == (int)ghosts[i].getPos()[1]) {
+                    System.out.println(name+" colliding with "+ghosts[i].getName());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

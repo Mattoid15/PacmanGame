@@ -1,7 +1,6 @@
 // Written by: Matthew Lingenfelter
 package com.mygame;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.Axis.TickMark;
 import javafx.scene.paint.Color;
 
 @SuppressWarnings("exports")
@@ -46,28 +45,12 @@ public class GameBoard {
         }
         drawFood(gc, food);
 
-        // For each ghost.. pass in color
+        // For each ghost
         for(int i = 0; i < allGhosts.length; i++) {
-            drawGhost(gc, allGhosts[i]);
-            if(allGhosts[i].getName()=="Inky") {
-                float[] track = allGhosts[i].getTrackingPosition(pacPos, pacman.getDirection());
-                gc.setFill(Color.CYAN);
-                gc.fillRect((int)track[0]*TILE_SIZE, (int)track[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            } else if(allGhosts[i].getName()=="Pinky") {
-                
-                float[] track = allGhosts[i].getTrackingPosition(pacPos, pacman.getDirection());
-                gc.setFill(Color.PINK);
-                gc.fillRect((int)track[0]*TILE_SIZE, (int)track[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            }
+            drawGhost(gc, allGhosts[i]); // Draw ghost on the screen
         }
-        
-
-        //drawGhost(gc, ghost);
 
         // Draw pacman on the screen
-        //gc.setFill(Color.BEIGE);
-        //gc.fillRect(((int)pacPos[0])*TILE_SIZE, ((int)pacPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
         // Pacman Body
         gc.setFill(Color.YELLOW);
         gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -80,10 +63,6 @@ public class GameBoard {
     // Draws a ghost on the screen
     private void drawGhost(GraphicsContext gc, Ghosts g) {
         float[] gPos = g.getPos();
-
-        // Draw ghost on the screen
-        //gc.setFill(Color.RED);
-        //gc.fillRect(((int)gPos[0])*TILE_SIZE, ((int)gPos[1])*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
         // Ghost Body
         switch (g.getName()) {
@@ -100,6 +79,8 @@ public class GameBoard {
                 gc.setFill(Color.ORANGE);
                 break;
         }
+       // gc.fillRect((int)gPos[0]*TILE_SIZE, (int)gPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, 28);
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE+5, 15, 25);
         gc.fillOval(gPos[0]*TILE_SIZE+7.5, gPos[1]*TILE_SIZE+5, 15, 25);
@@ -133,14 +114,14 @@ public class GameBoard {
         }
     }
 
+    // Draw all food remaining on the screen
     private void drawFood(GraphicsContext gc, int[][] f) {
-        // Draw all food remaining on the screen
         for(int row = 0; row < height; row++) {
             for(int col = 0; col < width; col++) {
                 if(f[row][col] == 1) {
                     gc.setFill(Color.WHITE);
                     gc.fillOval(col*TILE_SIZE+10, row*TILE_SIZE+10, TILE_SIZE/4, TILE_SIZE/4);
-                }
+                } //if == 2, powerpellet
             }
         }
     }

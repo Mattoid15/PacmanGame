@@ -21,19 +21,24 @@ public class Ghosts {
     }
 
     // Moves this ghost and updates location
-    public void move(Pacman pacMan) {
+    public void move(Pacman pacMan, Ghosts[] ghosts) {
         float[] pacPos = pacMan.getPos();
         // Check if ghost is in jail
         checkJail();
         if(inJail) {
             direction = "North";
             float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-            x_coord = newPos[0];
-            y_coord = newPos[1];
+            if(!Agents.checkCollition(ghosts, name, newPos)) {
+                x_coord = newPos[0];
+                y_coord = newPos[1];
+            }
+            //x_coord = newPos[0];
+            //y_coord = newPos[1];
             return;
         }
 
         int possibleMoves = 0;
+        //String[] legalActions = new String[] {"","","",""};
 
         // Count the number of moves the ghost can make
         if(!Wall.isWall((int)x_coord, ((int)y_coord)+1)) {
@@ -59,27 +64,43 @@ public class Ghosts {
 
         // Check if a wall was hit, or at an intersection
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
+
         if((x_coord==newPos[0] && y_coord==newPos[1]) || possibleMoves>=3) {
             switch (name) {
                 case "Blinky":
-                    Blinky(pacPos);
+                    newPos = Blinky(pacPos);
                     break;
                 case "Pinky":
-                    Pinky(pacPos, pacMan.getDirection());
+                    newPos = Pinky(pacPos, pacMan.getDirection());
                     break;
                 case "Inky":
-                    Inky(pacPos, pacMan.getDirection());
+                    newPos = Inky(pacPos, pacMan.getDirection());
                     break;
                 case "Clyde":
-                    Clyde(pacPos);
+                    newPos = Clyde(pacPos);
+                    break;
                 default:
-                    //Blinky(pacPos);
+                    System.out.println("Error occured finding ghost "+name+" alogrithm");
                     break;
             }
         }
-        // If not, continue forward
-        x_coord = newPos[0];
-        y_coord = newPos[1];
+        // If not, continue the same direction
+
+        if(!Agents.checkCollition(ghosts, name, newPos)) {
+            x_coord = newPos[0];
+            y_coord = newPos[1];
+        } else {
+            for(int i = 0; i < actions.length; i++) {
+                if(direction == actions[i]) {
+                    direction = oppActions[i];
+                    break;
+                }
+            }
+            //x_coord = (int)x_coord;
+            //y_coord = (int)y_coord;
+        }
+        //x_coord = newPos[0];
+        //y_coord = newPos[1];
     }
 
     // Returns this ghost's position as {x,y} array
@@ -104,9 +125,8 @@ public class Ghosts {
         }
     }
 
-    // Picks the direction that moves towards pacman
     // Blinky algorithm - chases pacman directly
-    public void Blinky(float[] pacPos) {
+    private float[] Blinky(float[] pacPos) {
         // Sets the location to track to pacman's exact location
         float[] track = new float[] {pacPos[0], pacPos[1]};
 
@@ -114,63 +134,83 @@ public class Ghosts {
 
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        x_coord = newPos[0];
-        y_coord = newPos[1];
+        
+        //x_coord = newPos[0];
+        //y_coord = newPos[1];
+        return newPos;
     }
 
     // Inky algorithm - tries to get behind pacman
-    public void Inky(float[] pacPos, String pacDir) {
+    private float[] Inky(float[] pacPos, String pacDir) {
         // Sets the location to track to the location behind pacman
         float[] track = new float[] {pacPos[0], pacPos[1]};
         switch (pacDir) {
             case "North":
-            track[1] +=1;
+            track[1] +=2;
                 break;
             case "South":
-            track[1] -=1;
+            track[1] -=2;
                 break;
             case "East":
-            track[0] -=1;
+            track[0] -=2;
                 break;
             case "West":
-            track[0] +=1;
+            track[0] +=2;
                 break;
         }
+
+        // Check if the location behind pacman is a wall
+        // If it is, track pacman's actual location instead
+        if(Wall.isWall((int)track[0], (int)track[1])) {
+            track[0] = pacPos[0];
+            track[1] = pacPos[1];
+        }
+
         String bestAction = getBestAction(track);
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        x_coord = newPos[0];
-        y_coord = newPos[1];
+        //x_coord = newPos[0];
+        //y_coord = newPos[1];
+        return newPos;
     }
 
     // Pinky algorithm - tries to get infront of pacman
-    public void Pinky(float[] pacPos, String pacDir) {
+    private float[] Pinky(float[] pacPos, String pacDir) {
         // Sets the location to track to in front of pacman
         float[] track = new float[] {pacPos[0], pacPos[1]};
         switch (pacDir) {
             case "North":
-            track[1] -=1;
+            track[1] -=2;
                 break;
             case "South":
-            track[1] +=1;
+            track[1] +=2;
                 break;
             case "East":
-            track[0] +=1;
+            track[0] +=2;
                 break;
             case "West":
-            track[0] -=1;
+            track[0] -=2;
                 break;
         }
+
+        // Check if the location in front of pacman is a wall
+        // If it is, track pacman's actual location instead
+        if(Wall.isWall((int)track[0], (int)track[1])) {
+            track[0] = pacPos[0];
+            track[1] = pacPos[1];
+        }
+
         String bestAction = getBestAction(track);
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        x_coord = newPos[0];
-        y_coord = newPos[1];
+        //x_coord = newPos[0];
+        //y_coord = newPos[1];
+        return newPos;
     }
 
     // Clyde alorithm - moves towards pacman, until pacman is within 8 tiles
     // Then tries to get to the lower left corner
-    public void Clyde(float[] pacPos) {
+    private float[] Clyde(float[] pacPos) {
         float distance = Math.abs(x_coord - pacPos[0]) + Math.abs(y_coord - pacPos[1]);
         String bestAction = direction;
         if(distance > 8f) {
@@ -180,8 +220,9 @@ public class Ghosts {
         }
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        x_coord = newPos[0];
-        y_coord = newPos[1];
+        //x_coord = newPos[0];
+        //y_coord = newPos[1];
+        return newPos;
     }
 
 
@@ -202,43 +243,5 @@ public class Ghosts {
             }
         }
         return bestAction;
-    }
-
-    public float[] getTrackingPosition(float[] pacPos, String pacDir) {
-        float[] track = new float[] {pacPos[0], pacPos[1]};
-        if(name=="Inky") {
-            switch (pacDir) {
-                case "North":
-                track[1] +=1;
-                    break;
-                case "South":
-                track[1] -=1;
-                    break;
-                case "East":
-                track[0] -=1;
-                    break;
-                case "West":
-                track[0] +=1;
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            switch (pacDir) {
-                case "North":
-                track[1] -=1;
-                    break;
-                case "South":
-                track[1] +=1;
-                    break;
-                case "East":
-                track[0] +=1;
-                    break;
-                case "West":
-                track[0] -=1;
-                    break;
-            }
-        }
-        return track;
     }
 }
