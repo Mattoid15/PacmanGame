@@ -65,10 +65,13 @@ public class Ghosts {
                     Blinky(pacPos);
                     break;
                 case "Pinky":
+                    Pinky(pacPos, pacMan.getDirection());
+                    break;
                 case "Inky":
                     Inky(pacPos, pacMan.getDirection());
                     break;
                 case "Clyde":
+                    Clyde(pacPos);
                 default:
                     //Blinky(pacPos);
                     break;
@@ -104,20 +107,10 @@ public class Ghosts {
     // Picks the direction that moves towards pacman
     // Blinky algorithm - chases pacman directly
     public void Blinky(float[] pacPos) {
-        String bestAction = direction;
-        float closestDist = 99999f;
+        // Sets the location to track to pacman's exact location
+        float[] track = new float[] {pacPos[0], pacPos[1]};
 
-        for(int i = 0; i < actions.length; i++) {
-            float[] newPos = Agents.move(actions[i], new float[] {x_coord, y_coord}, speed);
-
-            if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
-                float distance = Math.abs(newPos[0] - pacPos[0]) + Math.abs(newPos[1] - pacPos[1]);
-                if(distance < closestDist && direction != oppActions[i]) {
-                    closestDist = distance;
-                    bestAction = actions[i];
-                }
-            }
-        }
+        String bestAction = getBestAction(track);
 
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
@@ -127,29 +120,125 @@ public class Ghosts {
 
     // Inky algorithm - tries to get behind pacman
     public void Inky(float[] pacPos, String pacDir) {
-        String bestAction = direction;
-        float bestDist = 99999f;
-
-        for(int j = 0; j < oppActions.length; j++) {
-            if(name=="Inky" && pacDir==oppActions[j]) {
-                pacPos = Agents.move(oppActions[j], pacPos, 0.05f);
-            }
+        // Sets the location to track to the location behind pacman
+        float[] track = new float[] {pacPos[0], pacPos[1]};
+        switch (pacDir) {
+            case "North":
+            track[1] +=1;
+                break;
+            case "South":
+            track[1] -=1;
+                break;
+            case "East":
+            track[0] -=1;
+                break;
+            case "West":
+            track[0] +=1;
+                break;
         }
-        
+        String bestAction = getBestAction(track);
+        direction = bestAction;
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
+        x_coord = newPos[0];
+        y_coord = newPos[1];
+    }
+
+    // Pinky algorithm - tries to get infront of pacman
+    public void Pinky(float[] pacPos, String pacDir) {
+        // Sets the location to track to in front of pacman
+        float[] track = new float[] {pacPos[0], pacPos[1]};
+        switch (pacDir) {
+            case "North":
+            track[1] -=1;
+                break;
+            case "South":
+            track[1] +=1;
+                break;
+            case "East":
+            track[0] +=1;
+                break;
+            case "West":
+            track[0] -=1;
+                break;
+        }
+        String bestAction = getBestAction(track);
+        direction = bestAction;
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
+        x_coord = newPos[0];
+        y_coord = newPos[1];
+    }
+
+    // Clyde alorithm - moves towards pacman, until pacman is within 8 tiles
+    // Then tries to get to the lower left corner
+    public void Clyde(float[] pacPos) {
+        float distance = Math.abs(x_coord - pacPos[0]) + Math.abs(y_coord - pacPos[1]);
+        String bestAction = direction;
+        if(distance > 8f) {
+            bestAction = getBestAction(pacPos);
+        } else {
+            bestAction = getBestAction(new float[] {1f, 29f});
+        }
+        direction = bestAction;
+        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
+        x_coord = newPos[0];
+        y_coord = newPos[1];
+    }
+
+
+    // Helper function that returns the action that results in moving closer to the given location "track"
+    private String getBestAction(float[] track) {
+        String bestAction = direction;
+        float bestDist = 99999999f;
+
         for(int i = 0; i < actions.length; i++) {
             float[] newPos = Agents.move(actions[i], new float[] {x_coord, y_coord}, speed);
 
             if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
-                float distance = Math.abs(newPos[0] - pacPos[0]) + Math.abs(newPos[1] - pacPos[1]);
+                float distance = Math.abs(newPos[0] - track[0]) + Math.abs(newPos[1] - track[1]);
                 if(distance < bestDist && direction != oppActions[i]) {
                     bestDist = distance;
                     bestAction = actions[i];
                 }
             }
         }
-        direction = bestAction;
-        float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        x_coord = newPos[0];
-        y_coord = newPos[1];
+        return bestAction;
+    }
+
+    public float[] getTrackingPosition(float[] pacPos, String pacDir) {
+        float[] track = new float[] {pacPos[0], pacPos[1]};
+        if(name=="Inky") {
+            switch (pacDir) {
+                case "North":
+                track[1] +=1;
+                    break;
+                case "South":
+                track[1] -=1;
+                    break;
+                case "East":
+                track[0] -=1;
+                    break;
+                case "West":
+                track[0] +=1;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (pacDir) {
+                case "North":
+                track[1] -=1;
+                    break;
+                case "South":
+                track[1] +=1;
+                    break;
+                case "East":
+                track[0] +=1;
+                    break;
+                case "West":
+                track[0] -=1;
+                    break;
+            }
+        }
+        return track;
     }
 }

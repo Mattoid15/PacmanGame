@@ -1,6 +1,7 @@
 // Written by: Matthew Lingenfelter
 package com.mygame;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.Axis.TickMark;
 import javafx.scene.paint.Color;
 
 @SuppressWarnings("exports")
@@ -48,7 +49,19 @@ public class GameBoard {
         // For each ghost.. pass in color
         for(int i = 0; i < allGhosts.length; i++) {
             drawGhost(gc, allGhosts[i]);
+            if(allGhosts[i].getName()=="Inky") {
+                float[] track = allGhosts[i].getTrackingPosition(pacPos, pacman.getDirection());
+                gc.setFill(Color.CYAN);
+                gc.fillRect((int)track[0]*TILE_SIZE, (int)track[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            } else if(allGhosts[i].getName()=="Pinky") {
+                
+                float[] track = allGhosts[i].getTrackingPosition(pacPos, pacman.getDirection());
+                gc.setFill(Color.PINK);
+                gc.fillRect((int)track[0]*TILE_SIZE, (int)track[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
         }
+        
+
         //drawGhost(gc, ghost);
 
         // Draw pacman on the screen

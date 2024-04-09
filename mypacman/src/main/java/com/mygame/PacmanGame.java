@@ -27,8 +27,10 @@ public class PacmanGame extends Application {
 
         Ghosts inky = new Ghosts("Inky", 14f, 14f);
         Ghosts blinky = new Ghosts("Blinky", 13f, 14f);
+        Ghosts pinky = new Ghosts("Pinky", 14f, 15f);
+        Ghosts clyde = new Ghosts("Clyde", 13f, 15f);
 
-        Ghosts[] allGhosts = {inky, blinky};
+        Ghosts[] allGhosts = {inky, blinky, pinky, clyde};
 
 
         Canvas canvas = new Canvas(gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
