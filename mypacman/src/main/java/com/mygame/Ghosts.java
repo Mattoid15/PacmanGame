@@ -32,13 +32,10 @@ public class Ghosts {
                 x_coord = newPos[0];
                 y_coord = newPos[1];
             }
-            //x_coord = newPos[0];
-            //y_coord = newPos[1];
             return;
         }
 
         int possibleMoves = 0;
-        //String[] legalActions = new String[] {"","","",""};
 
         // Count the number of moves the ghost can make
         if(!Wall.isWall((int)x_coord, ((int)y_coord)+1)) {
@@ -84,8 +81,10 @@ public class Ghosts {
                     break;
             }
         }
-        // If not, continue the same direction
 
+        // Check if the next position has a ghost, 
+        // If it does, don't move and flip directions
+        // If not, continue the same direction
         if(!Agents.checkCollition(ghosts, name, newPos)) {
             x_coord = newPos[0];
             y_coord = newPos[1];
@@ -96,11 +95,7 @@ public class Ghosts {
                     break;
                 }
             }
-            //x_coord = (int)x_coord;
-            //y_coord = (int)y_coord;
         }
-        //x_coord = newPos[0];
-        //y_coord = newPos[1];
     }
 
     // Returns this ghost's position as {x,y} array
@@ -135,8 +130,6 @@ public class Ghosts {
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
         
-        //x_coord = newPos[0];
-        //y_coord = newPos[1];
         return newPos;
     }
 
@@ -169,8 +162,6 @@ public class Ghosts {
         String bestAction = getBestAction(track);
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        //x_coord = newPos[0];
-        //y_coord = newPos[1];
         return newPos;
     }
 
@@ -203,8 +194,6 @@ public class Ghosts {
         String bestAction = getBestAction(track);
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        //x_coord = newPos[0];
-        //y_coord = newPos[1];
         return newPos;
     }
 
@@ -220,11 +209,8 @@ public class Ghosts {
         }
         direction = bestAction;
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-        //x_coord = newPos[0];
-        //y_coord = newPos[1];
         return newPos;
     }
-
 
     // Helper function that returns the action that results in moving closer to the given location "track"
     private String getBestAction(float[] track) {

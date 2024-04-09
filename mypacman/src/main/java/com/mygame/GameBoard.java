@@ -79,7 +79,6 @@ public class GameBoard {
                 gc.setFill(Color.ORANGE);
                 break;
         }
-       // gc.fillRect((int)gPos[0]*TILE_SIZE, (int)gPos[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, 28);
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE+5, 15, 25);
