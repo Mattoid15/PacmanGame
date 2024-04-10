@@ -160,8 +160,9 @@ public class Ghosts {
 
         // Check if the location behind pacman is a wall
         // If it is, track pacman's actual location instead
-        if((track[0]<0||track[0]>Wall.getWalls()[0].length-1)||(track[1]<0||track[1]<Wall.getWalls().length-1)||Wall.isWall((int)track[0],(int)track[1])){
-
+        if((track[0]<=0||track[0]>Wall.getWalls()[0].length-1)||
+            (track[1]<=0||track[1]>Wall.getWalls().length-1)||
+            Wall.isWall((int)track[0],(int)track[1])){
 //        if(Wall.isWall((int)track[0], (int)track[1])) {
             track[0] = pacPos[0];
             track[1] = pacPos[1];
@@ -194,7 +195,9 @@ public class Ghosts {
 
         // Check if the location in front of pacman is a wall
         // If it is, track pacman's actual location instead
-        if((track[0]>0&&track[0]<Wall.getWalls().length-1)&&(track[1]>0&&track[1]<Wall.getWalls()[0].length-1)&&Wall.isWall((int)track[0],(int)track[1])){
+        if((track[0]<=0||track[0]>Wall.getWalls()[0].length-1)||
+            (track[1]<=0||track[1]>Wall.getWalls().length-1)||
+            Wall.isWall((int)track[0],(int)track[1])){
 
         //if(Wall.isWall((int)track[0],(int)track[1])) {
             track[0] = pacPos[0];
@@ -285,22 +288,21 @@ public class Ghosts {
             case "Pinky":
                 switch (pacMan.getDirection()) {
                     case "North":
-                        tracking[1] +=2;
-                        break;
-                    case "South":
                         tracking[1] -=2;
                         break;
-                    case "East":
-                        tracking[0] -=2;
+                    case "South":
+                        tracking[1] +=2;
                         break;
-                    case "West":
+                    case "East":
                         tracking[0] +=2;
                         break;
+                    case "West":
+                        tracking[0] -=2;
+                        break;
                 }
-                    if((tracking[0]<0||tracking[0]>Wall.getWalls()[0].length-1)||(tracking[1]<0||tracking[1]<Wall.getWalls().length-1)||Wall.isWall((int)tracking[0],(int)tracking[1])){
-
-
-//                if(Wall.isWall((int)tracking[0], (int)tracking[1])) {
+                if((tracking[0]<=0||tracking[0]>Wall.getWalls()[0].length-1)||
+                    (tracking[1]<=0||tracking[1]>Wall.getWalls().length-1)||
+                    Wall.isWall((int)tracking[0],(int)tracking[1])){
                     tracking[0] = pacPos[0];
                     tracking[1] = pacPos[1];
                 }
@@ -308,20 +310,21 @@ public class Ghosts {
             case "Inky":
                 switch (pacMan.getDirection()) {
                     case "North":
-                        tracking[1] -=2;
-                        break;
-                    case "South":
                         tracking[1] +=2;
                         break;
-                    case "East":
-                        tracking[0] +=2;
+                    case "South":
+                        tracking[1] -=2;
                         break;
-                    case "West":
+                    case "East":
                         tracking[0] -=2;
                         break;
+                    case "West":
+                        tracking[0] +=2;
+                        break;
                 }
-                if((tracking[0]>0&&tracking[0]<Wall.getWalls().length-1)&&(tracking[1]>0&&tracking[1]<Wall.getWalls()[0].length-1)&&Wall.isWall((int)tracking[0],(int)tracking[1])){
-
+                if((tracking[0]<=0||tracking[0]>Wall.getWalls()[0].length-1)||
+                    (tracking[1]<=0||tracking[1]>Wall.getWalls().length-1)||
+                    Wall.isWall((int)tracking[0],(int)tracking[1])){
 //                if(Wall.isWall((int)tracking[0], (int)tracking[1])) {
                     tracking[0] = pacPos[0];
                     tracking[1] = pacPos[1];
