@@ -7,11 +7,11 @@ public class Ghosts {
     private float y_coord;
     private float speed = 0.025f;
     private String direction;
-    private String[] actions = {"North", "South", "East", "West"};
-    private String[] oppActions = {"South", "North", "West", "East"};
+    private String[] actions = {"North", "East", "South", "West"};
+    private String[] oppActions = {"South", "West", "North", "East"};
     private static float tollerance = 0.1f;
     private boolean inJail = true;
-    private boolean isScared = false;
+    public boolean isScared = false;
     private String name = "";
 
     public Ghosts(String n, float x, float y) {
@@ -249,9 +249,33 @@ public class Ghosts {
     }
 
     public void scaredMove(Ghosts[] ghosts) {
+        int possibleMoves = 0;
+
+        // Count the number of moves the ghost can make
+        if(!Wall.isWall((int)x_coord, ((int)y_coord)+1)) {
+            if(x_coord >= ((int)x_coord)-tollerance && x_coord <= ((int)x_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+        if(!Wall.isWall((int)x_coord, ((int)y_coord)-1)) {
+            if(x_coord >= ((int)x_coord)-tollerance && x_coord <= ((int)x_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+        if(!Wall.isWall(((int)x_coord)+1, (int)y_coord)) {
+            if(y_coord >= ((int)y_coord)-tollerance && y_coord <= ((int)y_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+        if(!Wall.isWall(((int)x_coord)-1, (int)y_coord)) {
+            if(y_coord >= ((int)y_coord)-tollerance && y_coord <= ((int)y_coord)+tollerance) {
+                possibleMoves++;
+            }
+        }
+
         // Pick random direction to move when in a corner
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, (speed*0.5f));
-        if(x_coord==newPos[0] && y_coord==newPos[1]) {
+        if(x_coord==newPos[0] && y_coord==newPos[1] || possibleMoves>=3) {
             // pick new direction
             for(int i = 0; i < actions.length; i++) {
                 direction = actions[i];
@@ -325,7 +349,6 @@ public class Ghosts {
                 if((tracking[0]<=0||tracking[0]>Wall.getWalls()[0].length-1)||
                     (tracking[1]<=0||tracking[1]>Wall.getWalls().length-1)||
                     Wall.isWall((int)tracking[0],(int)tracking[1])){
-//                if(Wall.isWall((int)tracking[0], (int)tracking[1])) {
                     tracking[0] = pacPos[0];
                     tracking[1] = pacPos[1];
                 }

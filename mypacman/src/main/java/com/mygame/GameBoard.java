@@ -65,31 +65,38 @@ public class GameBoard {
         float[] gPos = g.getPos();
 
         // Ghost Body
-        switch (g.getName()) {
-            case "Blinky":
-                gc.setFill(Color.RED);
-                gc.setStroke(Color.RED);
-                break;
-            case "Pinky":
-                gc.setFill(Color.PINK);
-                gc.setStroke(Color.PINK);
-                break;
-            case "Inky":
-                gc.setFill(Color.CYAN);
-                gc.setStroke(Color.CYAN);
-                break;
-            case "Clyde":
-                gc.setFill(Color.ORANGE);
-                gc.setStroke(Color.ORANGE);
-                break;
+        if(g.isScared) {
+            gc.setFill(Color.BLUE);
+        } else {
+            switch (g.getName()) {
+                case "Blinky":
+                    gc.setFill(Color.RED);
+                    gc.setStroke(Color.RED);
+                    break;
+                case "Pinky":
+                    gc.setFill(Color.PINK);
+                    gc.setStroke(Color.PINK);
+                    break;
+                case "Inky":
+                    gc.setFill(Color.CYAN);
+                    gc.setStroke(Color.CYAN);
+                    break;
+                case "Clyde":
+                    gc.setFill(Color.ORANGE);
+                    gc.setStroke(Color.ORANGE);
+                    break;
+            }
         }
-        //Show where the ghost is heading to
-        float[] track = g.trackLocation(pacMan);
-        gc.beginPath();
-        gc.lineTo(gPos[0]*TILE_SIZE+15, gPos[1]*TILE_SIZE+15);
-        gc.lineTo(track[0]*TILE_SIZE+15, track[1]*TILE_SIZE+15);
-        gc.closePath();
-        gc.stroke();
+
+        if(!g.isScared) {
+            //Show where the ghost is heading to
+            float[] track = g.trackLocation(pacMan);
+            gc.beginPath();
+            gc.lineTo(gPos[0]*TILE_SIZE+15, gPos[1]*TILE_SIZE+15);
+            gc.lineTo(track[0]*TILE_SIZE+15, track[1]*TILE_SIZE+15);
+            gc.closePath();
+            gc.stroke();
+        }
 
         //gc.quadraticCurveTo(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, track[0]*TILE_SIZE, track[1]*TILE_SIZE);
         //gc.clip();

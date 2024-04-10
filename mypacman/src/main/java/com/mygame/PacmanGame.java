@@ -74,13 +74,14 @@ public class PacmanGame extends Application {
                     System.out.println("Scaring ghosts");
                     nextTime = currentTime.plusSeconds(6);
                     for(int i = 0; i < allGhosts.length; i++) { // For each ghost
-                        //allGhosts[i].setScared(true); // Move ghost
+                        allGhosts[i].setScared(true); // Move ghost
                     }
                 } 
-                if(currentTime.isBefore(nextTime)) {
+                if(!currentTime.isBefore(nextTime)) {
                     for(int i = 0; i < allGhosts.length; i++) { // For each ghost
-                       // allGhosts[i].setScared(false); // Move ghost
+                        allGhosts[i].setScared(false); // Move ghost
                     }
+                    
                 }
                 for(int i = 0; i < allGhosts.length; i++) { // For each ghost
                      allGhosts[i].move(pacman, allGhosts);; // Move ghost
