@@ -4,9 +4,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Stack;
 
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,23 +20,27 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 @SuppressWarnings("exports")
-public class PacmanGame {// extends Application {
+public class PacmanGame {
     private static final int TILE_SIZE = 30;
     public static LocalDateTime nextTime = LocalDateTime.now();
+    public static boolean wasHit = false;
+    
+    private static Pacman pacman;
+    private static GameBoard gameboard;
+    private static Canvas canvas;
+    private static GraphicsContext gc;
+    private static Text text;
+    private static StackPane root;
+    private static Scene scene;
 
-    //public static void main(String[] args) {
-    //    launch(args);
-    //}
-
-    //@Override
     public static void start(Stage primaryStage) {
         primaryStage.setTitle("Pac-Man");
 
         // Creates Pacman
-        Pacman pacman = new Pacman();
+        pacman = new Pacman();
 
         // Creates the gameBoard object, used to update the canvas/screen
-        GameBoard gameboard = new GameBoard();
+        gameboard = new GameBoard();
 
         // Creates the food pacman must eat
         Food foods = new Food();
@@ -49,9 +54,9 @@ public class PacmanGame {// extends Application {
         Ghosts[] allGhosts = {inky, blinky, pinky, clyde};
 
         // Creates the GUI canvas for the game
-        Canvas canvas = new Canvas(gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        Text text = new Text();
+        canvas = new Canvas(gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
+        gc = canvas.getGraphicsContext2D();
+        text = new Text();
         text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
         text.setStrokeWidth(2);
         text.setStroke(Color.WHITE);
@@ -59,12 +64,12 @@ public class PacmanGame {// extends Application {
         text.setTranslateY(-4*TILE_SIZE);
         text.setText("Score: "+pacman.getScore());
 
-        StackPane root = new StackPane();
+        root = new StackPane();
         root.getChildren().add(canvas);
         root.getChildren().add(text);
 
         // Creates a new scene for the game
-        Scene scene = new Scene(root, gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
+        scene = new Scene(root, gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
 
         // When a key is pressed, change pacman's direction
         scene.setOnKeyPressed(e -> pacman.changeDirection(e.getCode()));
@@ -73,14 +78,30 @@ public class PacmanGame {// extends Application {
         primaryStage.show();
 
         // Game loop
-        new AnimationTimer() {
+        gameLoop(primaryStage, allGhosts, foodsLeft);
+        //restartGame(primaryStage, foodsLeft);
+        /*new AnimationTimer() {
             @Override
             public void handle(long now) {
                 LocalDateTime currentTime = LocalDateTime.now();
                 
+                // Returns true if pacman was hit
+                if(!wasHit && pacman.gotHit(allGhosts)) {
+                    currentTime = LocalDateTime.now();
+                    nextTime = currentTime.plusSeconds(3);
+                    wasHit = true;
+
+                }
+                if(wasHit && currentTime.isAfter(nextTime)) {
+                    System.out.println("Restarting Game");
+                    restartGame(primaryStage, foodsLeft);
+                    stop();
+                } else if(!wasHit) {
+                    
                 pacman.move(); // Move pacman 
-                // Check gameOver conditions, no more food; pacman dies
+
                 // Check if pacman ate food, or a powerpellet
+                // Returns true if powerpellet eaten
                 if(pacman.eating(foodsLeft, allGhosts)) {
                     currentTime = LocalDateTime.now();
                     nextTime = currentTime.plusSeconds(6);
@@ -107,23 +128,125 @@ public class PacmanGame {// extends Application {
                         }
                     }
                 }
+
+                // Check gameOver conditions, no more food; pacman dies
                 if(foodRemaining <= 0) {
                     stop();
+                    // Writes score to output file
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter("scores"));
                         writer.append(' ');
                         writer.append(""+pacman.getScore());
                         writer.close();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    MainMenu.MainScreen(primaryStage);
 
+                    // Returns to main menu
+                    MainMenu.MainScreen(primaryStage);
+                }
+            }
+            }
+        }.start();*/
+    }
+
+    public static void restartGame(Stage primaryStage, int[][]foodLeft) {
+        System.out.println("Restarting");
+        
+        // Recreates each ghost, then add them all to an array of all ghosts
+        Ghosts inky = new Ghosts("Inky", 14f, 14f);
+        Ghosts blinky = new Ghosts("Blinky", 13f, 14f);
+        Ghosts pinky = new Ghosts("Pinky", 14f, 15f);
+        Ghosts clyde = new Ghosts("Clyde", 13f, 15f);
+        Ghosts[] allGhosts = {inky, blinky, pinky, clyde};
+
+        pacman.resetPos();
+        pacman.wasHit = false;
+        nextTime = nextTime.minusSeconds(20);
+
+        gameLoop(primaryStage, allGhosts, foodLeft);
+    }
+
+    private static void gameLoop(Stage primaryStage, Ghosts[] allGhosts, int[][] foodLeft) {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Counts the remaining food on the board
+                int foodRemaining = 0;
+                for(int r = 0; r < foodLeft[0].length; r++){
+                    for(int c = 0; c < foodLeft[r].length; c++) {
+                        if(foodLeft[r][c]==1) {
+                            foodRemaining++;
+                        }
+                    }
+                }
+                
+                // Checks Game Over Conditions (No more food, out of lives)
+                if(foodRemaining <=0 || pacman.livesLeft <= 0) {
+                    stop();
+                    // Writes score to output file
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter("scores"));
+                        writer.append(' ');
+                        writer.append(""+pacman.getScore());
+                        writer.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Returns to main menu
+                    MainMenu.MainScreen(primaryStage);
                 }
 
+
+                // Sets the current time
+                LocalDateTime currentTime = LocalDateTime.now();
+
+                // Check if Pacman hit a ghost
+                // Returns true if the ghost is not scared
+                if(!pacman.wasHit && pacman.gotHit(allGhosts)) {
+                    nextTime = currentTime.plusSeconds(3);
+                    pacman.wasHit = true;
+                }
+
+                // Checks if pacman was hit and waits 3 seconds
+                if(pacman.wasHit && currentTime.isAfter(nextTime)) {
+                    restartGame(primaryStage, foodLeft);
+                    stop();
+                } else if(!pacman.wasHit) {
+                    // Check if Pacman is eating food, or a powerpellet
+                    // Returns true if Pacman atw a powerpellet
+                    if(pacman.eating(foodLeft, allGhosts)) {
+                        // Sets all ghosts to the scared state
+                        nextTime = currentTime.plusSeconds(6);
+                        // For each ghost, set scared to true
+                        for(int i = 0; i < allGhosts.length; i++) {
+                            allGhosts[i].setScared(true);
+                        }
+                    }
+
+                    // Checks if the ghost scared timer is up
+                    if(currentTime.isAfter(nextTime)) {
+                        // for each ghost, set scared to false
+                        for(int i = 0; i < allGhosts.length; i++) {
+                            allGhosts[i].setScared(false);
+                        }
+                        pacman.ghostsEaten = 0;
+                    }
+
+                    // Moves Pacman
+                    pacman.move();
+
+                    // For each ghost, move ghost
+                    for(int i = 0; i < allGhosts.length; i++) {
+                        allGhosts[i].move(pacman, allGhosts);
+                    }
+
+                    // Updates display with new information
+                    gameboard.render(gc, pacman, foodLeft, allGhosts, text);
+                }
             }
         }.start();
-        //MainMenu.endScreen(primaryStage);
     }
+
 }

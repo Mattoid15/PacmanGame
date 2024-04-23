@@ -2,6 +2,7 @@
 
 package com.mygame;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 
 @SuppressWarnings("exports")
@@ -12,6 +13,8 @@ public class Pacman extends Agents {
     private String direction;
     private int score = 0;
     public int ghostsEaten = 0;
+    public int livesLeft = 3;
+    public boolean wasHit = false;
 
     public Pacman() {
         direction = "West";
@@ -29,6 +32,15 @@ public class Pacman extends Agents {
     // Returns pacman's position as {x,y} array
     public float[] getPos() {
         return new float[] {x_coord, y_coord};
+    }
+
+    // Returns pacman to the starting location
+    // Used to respawn
+    public void resetPos() {
+        direction = "West";
+        x_coord = 14f;
+        y_coord = 23f;
+        livesLeft--;
     }
 
     // Changes the direction pacman is going based on the key pressed
@@ -83,6 +95,7 @@ public class Pacman extends Agents {
         return direction;
     }
 
+    // Checks to see if pacman can eat a ghost
     private void eatingGhosts(Ghosts[] ghosts) {
         // For each ghost
         for(int i = 0; i < ghosts.length; i++) {
@@ -118,4 +131,18 @@ public class Pacman extends Agents {
             }
         }
     }
+
+    public boolean gotHit(Ghosts[] ghosts) {
+        // For each ghost
+        for(int i = 0; i < ghosts.length; i++) {
+            // get ghost position
+            float[] ghostPos = ghosts[i].getPos();
+            // Checks if in contact with ghost
+            if((int)x_coord == (int)ghostPos[0] && (int)y_coord == (int)ghostPos[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
