@@ -2,7 +2,6 @@
 
 package com.mygame;
 
-import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 
 @SuppressWarnings("exports")
@@ -65,8 +64,6 @@ public class Pacman extends Agents {
 
     // Method used to tell if pacman is eating food
     public boolean eating(int[][] food, Ghosts[] ghosts) {
-        eatingGhosts(ghosts);
-        
         if(food[(int)y_coord][(int)x_coord] == 1) {
             food[(int)y_coord][(int)x_coord] = 0;
             updateScore(10);
@@ -95,13 +92,13 @@ public class Pacman extends Agents {
         return direction;
     }
 
-    // Checks to see if pacman can eat a ghost
-    private void eatingGhosts(Ghosts[] ghosts) {
+    // Method that returns true if pacman hits a not scared ghost
+    public boolean gotHit(Ghosts[] ghosts) {
         // For each ghost
         for(int i = 0; i < ghosts.length; i++) {
             // get ghost position
             float[] ghostPos = ghosts[i].getPos();
-            // check if in contact
+            // Checks if in contact with ghost
             if((int)x_coord == (int)ghostPos[0] && (int)y_coord == (int)ghostPos[1]) {
                 // check if ghost is scared
                 if(ghosts[i].isScared) {
@@ -127,22 +124,12 @@ public class Pacman extends Agents {
                     ghosts[i].setScared(false);
                     // move ghost to start position
                     ghosts[i].setPos(14f, 14f);
+                    return false;
+                } else {
+                    return true;
                 }
-            }
-        }
-    }
-
-    public boolean gotHit(Ghosts[] ghosts) {
-        // For each ghost
-        for(int i = 0; i < ghosts.length; i++) {
-            // get ghost position
-            float[] ghostPos = ghosts[i].getPos();
-            // Checks if in contact with ghost
-            if((int)x_coord == (int)ghostPos[0] && (int)y_coord == (int)ghostPos[1]) {
-                return true;
             }
         }
         return false;
     }
-
 }

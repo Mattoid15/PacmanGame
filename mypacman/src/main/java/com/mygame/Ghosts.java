@@ -23,12 +23,12 @@ public class Ghosts {
 
     // Moves this ghost and updates location
     public void move(Pacman pacMan, Ghosts[] ghosts) {
+        // If ghost is scared, change the way the ghost moves
         if(isScared) {
             scaredMove(ghosts);
             return;
         }
 
-        float[] pacPos = pacMan.getPos();
         // Check if ghost is in jail
         checkJail();
         if(inJail) {
@@ -41,9 +41,11 @@ public class Ghosts {
             return;
         }
 
-        int possibleMoves = 0;
+        // Get Pacman's position (used for tracking)
+        float[] pacPos = pacMan.getPos();
 
         // Count the number of moves the ghost can make
+        int possibleMoves = 0;
         if(!Wall.isWall((int)x_coord, ((int)y_coord)+1)) {
             if(x_coord >= ((int)x_coord)-tollerance && x_coord <= ((int)x_coord)+tollerance) {
                 possibleMoves++;
@@ -67,7 +69,6 @@ public class Ghosts {
 
         // Check if a wall was hit, or at an intersection
         float[] newPos = Agents.move(direction, new float[] {x_coord, y_coord}, speed);
-
         if((x_coord==newPos[0] && y_coord==newPos[1]) || possibleMoves>=3) {
             switch (name) {
                 case "Blinky":
@@ -168,8 +169,7 @@ public class Ghosts {
         // If it is, track pacman's actual location instead
         if((track[0]<=0||track[0]>Wall.getWalls()[0].length-1)||
             (track[1]<=0||track[1]>Wall.getWalls().length-1)||
-            Wall.isWall((int)track[0],(int)track[1])){
-//        if(Wall.isWall((int)track[0], (int)track[1])) {
+            Wall.isWall((int)track[0],(int)track[1])) {
             track[0] = pacPos[0];
             track[1] = pacPos[1];
         }
@@ -203,9 +203,7 @@ public class Ghosts {
         // If it is, track pacman's actual location instead
         if((track[0]<=0||track[0]>Wall.getWalls()[0].length-1)||
             (track[1]<=0||track[1]>Wall.getWalls().length-1)||
-            Wall.isWall((int)track[0],(int)track[1])){
-
-        //if(Wall.isWall((int)track[0],(int)track[1])) {
+            Wall.isWall((int)track[0],(int)track[1])) {
             track[0] = pacPos[0];
             track[1] = pacPos[1];
         }
@@ -235,10 +233,9 @@ public class Ghosts {
     private String getBestAction(float[] track) {
         String bestAction = direction;
         float bestDist = 99999999f;
-
+        // Checks each action and calulate the distance from the new location to the tracking location
         for(int i = 0; i < actions.length; i++) {
             float[] newPos = Agents.move(actions[i], new float[] {x_coord, y_coord}, speed);
-
             if(x_coord!=newPos[0] || y_coord!=newPos[1]) {
                 float distance = Math.abs(newPos[0] - track[0]) + Math.abs(newPos[1] - track[1]);
                 if(distance < bestDist && direction != oppActions[i]) {
@@ -292,7 +289,6 @@ public class Ghosts {
             }
         }
 
-
         // Check if the next position has a ghost, 
         // If it does, don't move and flip directions
         // If not, continue the same direction
@@ -309,6 +305,7 @@ public class Ghosts {
         }
     }
 
+    // Method used for displaying where each ghost is trying to get to
     public float[] trackLocation(Pacman pacMan) {
         float[] pacPos = pacMan.getPos();
         float[] tracking = new float[] {pacPos[0], pacPos[1]};

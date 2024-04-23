@@ -63,6 +63,11 @@ public class GameBoard {
         // Display Score on Screen
         text.setText("Score: "+pacman.getScore());
 
+        // Display Lives Left on Screen
+        for(int i = 0; i < pacman.livesLeft; i++) {
+            gc.setFill(Color.YELLOW);
+            gc.fillOval((1+i)*TILE_SIZE, 17*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
     }
 
     // Draws a ghost on the screen
@@ -93,7 +98,9 @@ public class GameBoard {
             }
         }
 
-        if(!g.isScared) {
+        // ---------------------------------------------------------
+        // COMMENT THIS BLOCK TO REMOVE GHOST TRACKING LINES
+        if(MainMenu.ShowTracking && !g.isScared) {
             //Show where the ghost is heading to
             float[] track = g.trackLocation(pacMan);
             gc.beginPath();
@@ -102,10 +109,7 @@ public class GameBoard {
             gc.closePath();
             gc.stroke();
         }
-
-        //gc.quadraticCurveTo(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, track[0]*TILE_SIZE, track[1]*TILE_SIZE);
-        //gc.clip();
-        //gc.fillRect(track[0]*TILE_SIZE, track[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        // ---------------------------------------------------------
 
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE, TILE_SIZE, 28);
         gc.fillOval(gPos[0]*TILE_SIZE, gPos[1]*TILE_SIZE+5, 15, 25);

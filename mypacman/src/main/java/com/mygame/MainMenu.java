@@ -4,10 +4,8 @@ package com.mygame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +17,7 @@ import javafx.stage.Stage;
 @SuppressWarnings("exports")
 
 public class MainMenu extends Application {
+    public static boolean ShowTracking = true;
     public static void main(String[] args) {
         launch(args);
     }
@@ -29,10 +28,12 @@ public class MainMenu extends Application {
         MainScreen(primaryStage);
     }
 
+    // Displays the main menu screen
     public static void MainScreen(Stage primaryStage) {
         // Create each button option
         Button startButton = new Button("Start Game");
         Button scoresButton = new Button("Show Scores");
+        Button trackButton = new Button("Show Ghost Tracking: On");
         Button exitButton = new Button("Exit");
 
         // Set actions for the buttons
@@ -45,11 +46,21 @@ public class MainMenu extends Application {
             // Add code to show options menu
             showScores(primaryStage);
         });
+        trackButton.setOnAction(e -> {
+            if(ShowTracking) {
+                ShowTracking = false;
+                trackButton.setText("Show Ghost Tracking: Off");
+            } else {
+                ShowTracking = true;
+                trackButton.setText("Show Ghost Tracking: On");
+            }
+        });
+
         exitButton.setOnAction(e -> primaryStage.close());
 
         // Create the layout
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(startButton, scoresButton, exitButton);
+        layout.getChildren().addAll(startButton, scoresButton, trackButton, exitButton);
         layout.setAlignment(Pos.CENTER);
 
         // Create the scene
@@ -72,6 +83,8 @@ public class MainMenu extends Application {
         backButton.setOnAction(e -> {
             MainScreen(primaryStage);
         });
+
+        // Clears the scores file, resetting previous scores
         resetButton.setOnAction(e -> {
             try {
                 PrintWriter writer = new PrintWriter("scores");
@@ -79,7 +92,6 @@ public class MainMenu extends Application {
                 writer.close();
                 showScores(primaryStage);
             } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             
@@ -95,7 +107,6 @@ public class MainMenu extends Application {
             }
             reader.close();
         } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 

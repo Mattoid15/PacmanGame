@@ -4,9 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Stack;
-
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -23,8 +20,6 @@ import javafx.stage.Stage;
 public class PacmanGame {
     private static final int TILE_SIZE = 30;
     public static LocalDateTime nextTime = LocalDateTime.now();
-    public static boolean wasHit = false;
-    
     private static Pacman pacman;
     private static GameBoard gameboard;
     private static Canvas canvas;
@@ -79,77 +74,9 @@ public class PacmanGame {
 
         // Game loop
         gameLoop(primaryStage, allGhosts, foodsLeft);
-        //restartGame(primaryStage, foodsLeft);
-        /*new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                LocalDateTime currentTime = LocalDateTime.now();
-                
-                // Returns true if pacman was hit
-                if(!wasHit && pacman.gotHit(allGhosts)) {
-                    currentTime = LocalDateTime.now();
-                    nextTime = currentTime.plusSeconds(3);
-                    wasHit = true;
-
-                }
-                if(wasHit && currentTime.isAfter(nextTime)) {
-                    System.out.println("Restarting Game");
-                    restartGame(primaryStage, foodsLeft);
-                    stop();
-                } else if(!wasHit) {
-                    
-                pacman.move(); // Move pacman 
-
-                // Check if pacman ate food, or a powerpellet
-                // Returns true if powerpellet eaten
-                if(pacman.eating(foodsLeft, allGhosts)) {
-                    currentTime = LocalDateTime.now();
-                    nextTime = currentTime.plusSeconds(6);
-                    for(int i = 0; i < allGhosts.length; i++) { // For each ghost
-                        allGhosts[i].setScared(true); // Move ghost
-                    }
-                } 
-                if(!currentTime.isBefore(nextTime)) {
-                    for(int i = 0; i < allGhosts.length; i++) { // For each ghost
-                        allGhosts[i].setScared(false); // Move ghost
-                        pacman.ghostsEaten = 0;
-                    }
-                    
-                }
-                for(int i = 0; i < allGhosts.length; i++) { // For each ghost
-                     allGhosts[i].move(pacman, allGhosts);; // Move ghost
-                 }
-                gameboard.render(gc, pacman, foodsLeft, allGhosts, text); // Update the screen
-                int foodRemaining = 0;
-                for(int i = 0; i < foodsLeft[0].length; i++) {
-                    for(int j = 0; j < foodsLeft[1].length; j++) {
-                        if(foodsLeft[i][j]==1) {
-                            foodRemaining++;
-                        }
-                    }
-                }
-
-                // Check gameOver conditions, no more food; pacman dies
-                if(foodRemaining <= 0) {
-                    stop();
-                    // Writes score to output file
-                    try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter("scores"));
-                        writer.append(' ');
-                        writer.append(""+pacman.getScore());
-                        writer.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Returns to main menu
-                    MainMenu.MainScreen(primaryStage);
-                }
-            }
-            }
-        }.start();*/
     }
 
+    // Restarts the game until there are no lives remaining
     public static void restartGame(Stage primaryStage, int[][]foodLeft) {
         System.out.println("Restarting");
         
@@ -167,6 +94,7 @@ public class PacmanGame {
         gameLoop(primaryStage, allGhosts, foodLeft);
     }
 
+    // Main loop that drives the game
     private static void gameLoop(Stage primaryStage, Ghosts[] allGhosts, int[][] foodLeft) {
         new AnimationTimer() {
             @Override
@@ -193,11 +121,9 @@ public class PacmanGame {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     // Returns to main menu
                     MainMenu.MainScreen(primaryStage);
                 }
-
 
                 // Sets the current time
                 LocalDateTime currentTime = LocalDateTime.now();
@@ -248,5 +174,4 @@ public class PacmanGame {
             }
         }.start();
     }
-
 }

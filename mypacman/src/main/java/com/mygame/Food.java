@@ -3,8 +3,6 @@
 package com.mygame;
 
 public class Food {
-    private int foodRemaining = 0;
-
     // A 2D array representing were all remaining food is
     private static int[][] foodLeft = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -40,22 +38,8 @@ public class Food {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
 
-    public Food() {
-        int height = foodLeft.length;
-        int width = foodLeft[0].length;
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
-                if(foodLeft[i][j]==1) {
-                    foodRemaining++;
-                }
-            }
-        }
-    }
+    public Food() {}
     public int[][] getFood() {
         return foodLeft;
-    }
-
-    public int remaining() {
-        return foodRemaining;
     }
 }

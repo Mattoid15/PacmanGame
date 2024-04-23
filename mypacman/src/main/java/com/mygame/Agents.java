@@ -3,7 +3,8 @@
 package com.mygame;
 
 public class Agents {
-    
+    // Method used by all agents (Pacman and Ghosts)
+    // Used to update agent position and check wall collition
     public static float[] move(String direction, float[] pos, float speed) {
         float newX = -1f;
         float newY = -1f;
@@ -17,9 +18,8 @@ public class Agents {
                 newY = pos[1] - speed;
 
                 // Don't move if there is a wall to the north
-                if(Wall.isWall(xInt, yInt-1) && newY < yInt) {
-                    break;
-                }
+                if(Wall.isWall(xInt, yInt-1) && newY < yInt) { break; }
+
                 // Update position
                 pos[1] = newY;
                 pos[0] = xInt;
@@ -29,9 +29,8 @@ public class Agents {
                 newY = pos[1] + speed;
 
                 // Don't move if there is a wall to the south
-                if(Wall.isWall(xInt, yInt+1) && newY > yInt) {
-                    break;
-                }
+                if(Wall.isWall(xInt, yInt+1) && newY > yInt) { break; }
+
                 // Update position
                 pos[1] = newY;
                 pos[0] = xInt;
@@ -46,12 +45,10 @@ public class Agents {
                     pos[1] = yInt;
                     break;
                 }
-                
 
                 // If the next position is wall, don't move
-                if(Wall.isWall(xInt+1, yInt) && newX > xInt) {
-                    break;
-                }
+                if(Wall.isWall(xInt+1, yInt) && newX > xInt) { break; }
+
                 // Update position
                 pos[0] = newX;
                 pos[1] = yInt;
@@ -70,9 +67,8 @@ public class Agents {
                 }
 
                 // If the next position is wall, don't move
-                if(Wall.isWall(xInt-1, yInt) && newX < xInt) {
-                    break;
-                }
+                if(Wall.isWall(xInt-1, yInt) && newX < xInt) { break; }
+
                 // Update position
                 pos[0] = newX;
                 pos[1] = yInt;
@@ -84,14 +80,12 @@ public class Agents {
         return pos;
     }
 
-    // Pass in array of ghosts, and current ghost name
+    // Returns true if a ghost is hitting another ghost
     public static boolean checkCollition(Ghosts[] ghosts, String name, float[] newPos) {        
         // Check if new location has a different ghost
-        // If it does, don't move
         for(int i = 0; i < ghosts.length; i++) {
             if(name != ghosts[i].getName()) { // Check each ghost position that is not the current ghost
                 if((int)newPos[0] == (int)ghosts[i].getPos()[0] && (int)newPos[1] == (int)ghosts[i].getPos()[1]) {
-                    //System.out.println(name+" colliding with "+ghosts[i].getName());
                     return true;
                 }
             }
