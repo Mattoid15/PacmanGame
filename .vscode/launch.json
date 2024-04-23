@@ -14,7 +14,7 @@
             "type": "java",
             "name": "PacmanGame",
             "request": "launch",
-            "mainClass": "com.mygame/com.mygame.PacmanGame",
+            "mainClass": "com.mygame/com.mygame.MainMenu",
             "projectName": "mypacman"
         }
     ]

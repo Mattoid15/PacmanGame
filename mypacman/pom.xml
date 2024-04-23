@@ -41,8 +41,8 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <!--<mainClass>com.example.MainMenu</mainClass>-->
-                            <mainClass>com.mygame.PacmanGame</mainClass>
+                            <mainClass>com.mygame.MainMenu</mainClass>
+                            <!--<mainClass>com.mygame.PacmanGame</mainClass>-->
                         </configuration>
                     </execution>
                 </executions>

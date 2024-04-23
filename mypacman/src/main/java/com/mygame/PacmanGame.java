@@ -1,5 +1,8 @@
 // Written by: Matthew Lingenfelter
 package com.mygame;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import javafx.animation.AnimationTimer;
@@ -16,16 +19,16 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 @SuppressWarnings("exports")
-public class PacmanGame extends Application {
+public class PacmanGame {// extends Application {
     private static final int TILE_SIZE = 30;
-    public LocalDateTime nextTime = LocalDateTime.now();   
+    public static LocalDateTime nextTime = LocalDateTime.now();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    //public static void main(String[] args) {
+    //    launch(args);
+    //}
 
-    @Override
-    public void start(Stage primaryStage) {
+    //@Override
+    public static void start(Stage primaryStage) {
         primaryStage.setTitle("Pac-Man");
 
         // Creates Pacman
@@ -56,7 +59,6 @@ public class PacmanGame extends Application {
         text.setTranslateY(-4*TILE_SIZE);
         text.setText("Score: "+pacman.getScore());
 
-
         StackPane root = new StackPane();
         root.getChildren().add(canvas);
         root.getChildren().add(text);
@@ -70,12 +72,7 @@ public class PacmanGame extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // Initialize game objects
-        //boolean gameOver = false;
-             
-
         // Game loop
-        //while (!gameOver) {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -102,7 +99,31 @@ public class PacmanGame extends Application {
                      allGhosts[i].move(pacman, allGhosts);; // Move ghost
                  }
                 gameboard.render(gc, pacman, foodsLeft, allGhosts, text); // Update the screen
+                int foodRemaining = 0;
+                for(int i = 0; i < foodsLeft[0].length; i++) {
+                    for(int j = 0; j < foodsLeft[1].length; j++) {
+                        if(foodsLeft[i][j]==1) {
+                            foodRemaining++;
+                        }
+                    }
+                }
+                if(foodRemaining <= 0) {
+                    stop();
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter("scores"));
+                        writer.append(' ');
+                        writer.append(""+pacman.getScore());
+                        writer.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    MainMenu.MainScreen(primaryStage);
+
+                }
+
             }
         }.start();
+        //MainMenu.endScreen(primaryStage);
     }
 }
