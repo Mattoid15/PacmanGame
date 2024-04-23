@@ -84,9 +84,8 @@ public class PacmanGame extends Application {
                 pacman.move(); // Move pacman 
                 // Check gameOver conditions, no more food; pacman dies
                 // Check if pacman ate food, or a powerpellet
-                if(pacman.eating(foodsLeft)) {
+                if(pacman.eating(foodsLeft, allGhosts)) {
                     currentTime = LocalDateTime.now();
-                    System.out.println("Scaring ghosts");
                     nextTime = currentTime.plusSeconds(6);
                     for(int i = 0; i < allGhosts.length; i++) { // For each ghost
                         allGhosts[i].setScared(true); // Move ghost
@@ -95,6 +94,7 @@ public class PacmanGame extends Application {
                 if(!currentTime.isBefore(nextTime)) {
                     for(int i = 0; i < allGhosts.length; i++) { // For each ghost
                         allGhosts[i].setScared(false); // Move ghost
+                        pacman.ghostsEaten = 0;
                     }
                     
                 }

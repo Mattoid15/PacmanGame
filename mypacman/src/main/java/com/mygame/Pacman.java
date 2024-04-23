@@ -11,6 +11,7 @@ public class Pacman extends Agents {
     private float speed = 0.05f;
     private String direction;
     private int score = 0;
+    public int ghostsEaten = 0;
 
     public Pacman() {
         direction = "West";
@@ -51,7 +52,9 @@ public class Pacman extends Agents {
     }
 
     // Method used to tell if pacman is eating food
-    public boolean eating(int[][] food) {
+    public boolean eating(int[][] food, Ghosts[] ghosts) {
+        eatingGhosts(ghosts);
+        
         if(food[(int)y_coord][(int)x_coord] == 1) {
             food[(int)y_coord][(int)x_coord] = 0;
             updateScore(10);
@@ -80,5 +83,39 @@ public class Pacman extends Agents {
         return direction;
     }
 
-    
+    private void eatingGhosts(Ghosts[] ghosts) {
+        // For each ghost
+        for(int i = 0; i < ghosts.length; i++) {
+            // get ghost position
+            float[] ghostPos = ghosts[i].getPos();
+            // check if in contact
+            if((int)x_coord == (int)ghostPos[0] && (int)y_coord == (int)ghostPos[1]) {
+                // check if ghost is scared
+                if(ghosts[i].isScared) {
+                    // update score
+                    ghostsEaten++;
+                    switch (ghostsEaten) {
+                        case 1:
+                            updateScore(200);
+                            break;
+                        case 2:
+                            updateScore(400);
+                            break;
+                        case 3:
+                            updateScore(800);
+                            break;
+                        case 4:
+                            updateScore(1600);
+                            break;
+                        default:
+                            break;
+                    }
+                    // set ghost to not scared
+                    ghosts[i].setScared(false);
+                    // move ghost to start position
+                    ghosts[i].setPos(14f, 14f);
+                }
+            }
+        }
+    }
 }

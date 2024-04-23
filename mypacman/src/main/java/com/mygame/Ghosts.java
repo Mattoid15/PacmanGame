@@ -109,6 +109,12 @@ public class Ghosts {
         return new float[] {x_coord, y_coord};
     }
 
+    // Sets the ghost's position
+    public void setPos(float x, float y) {
+        x_coord = x;
+        y_coord = y;
+    }
+
     // Returns this ghost's direction
     public String getDir() {
         return direction;
