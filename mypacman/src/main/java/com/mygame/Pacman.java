@@ -59,6 +59,7 @@ public class Pacman extends Agents {
             food[(int)y_coord][(int)x_coord] = 0;
             updateScore(50);
             // set ghosts to be scared
+            // Eating Ghost
             return true;
         }
         return false;
@@ -78,4 +79,6 @@ public class Pacman extends Agents {
     public String getDirection() {
         return direction;
     }
+
+    
 }

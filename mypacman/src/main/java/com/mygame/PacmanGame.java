@@ -8,6 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 @SuppressWarnings("exports")
@@ -43,8 +48,18 @@ public class PacmanGame extends Application {
         // Creates the GUI canvas for the game
         Canvas canvas = new Canvas(gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        Text text = new Text();
+        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        text.setStrokeWidth(2);
+        text.setStroke(Color.WHITE);
+        text.setTranslateX(-11*TILE_SIZE-15);
+        text.setTranslateY(-4*TILE_SIZE);
+        text.setText("Score: "+pacman.getScore());
+
+
         StackPane root = new StackPane();
         root.getChildren().add(canvas);
+        root.getChildren().add(text);
 
         // Creates a new scene for the game
         Scene scene = new Scene(root, gameboard.getWidth()*TILE_SIZE, gameboard.getHeight()*TILE_SIZE);
@@ -86,7 +101,7 @@ public class PacmanGame extends Application {
                 for(int i = 0; i < allGhosts.length; i++) { // For each ghost
                      allGhosts[i].move(pacman, allGhosts);; // Move ghost
                  }
-                gameboard.render(gc, pacman, foodsLeft, allGhosts); // Update the screen
+                gameboard.render(gc, pacman, foodsLeft, allGhosts, text); // Update the screen
             }
         }.start();
     }

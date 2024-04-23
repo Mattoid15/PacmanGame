@@ -2,6 +2,7 @@
 package com.mygame;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 @SuppressWarnings("exports")
 public class GameBoard {
@@ -27,7 +28,7 @@ public class GameBoard {
     }
 
     // Updates the screen to display the walls
-    public void render(GraphicsContext gc, Pacman pacman, int[][] food, Ghosts[] allGhosts) {
+    public void render(GraphicsContext gc, Pacman pacman, int[][] food, Ghosts[] allGhosts, Text text) {
         float[] pacPos = pacman.getPos();
         gc.clearRect(0, 0, width*TILE_SIZE, height*TILE_SIZE);
         
@@ -58,6 +59,10 @@ public class GameBoard {
         // Pacman indicator
         gc.setFill(Color.RED);
         gc.fillOval(pacPos[0]*TILE_SIZE, pacPos[1]*TILE_SIZE, 2, 2);
+
+        // Display Score on Screen
+        text.setText("Score: "+pacman.getScore());
+
     }
 
     // Draws a ghost on the screen
